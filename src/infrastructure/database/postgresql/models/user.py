@@ -14,3 +14,9 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     bookings: Mapped[List['Booking']] = relationship(back_populates='user')
+
+
+
+    @classmethod
+    def get_db(cls, session: "AsyncSession"):
+        return SQLAlchemyBaseUserTableUUID(session, cls)
