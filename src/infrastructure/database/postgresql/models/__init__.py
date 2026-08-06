@@ -6,3 +6,4 @@ from .seat import Seat
 from .booking import Booking
 from .booking_seat import BookingSeat
 from .payment import Payment
+from .access_token import AccessToken
