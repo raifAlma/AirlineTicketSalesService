@@ -4,6 +4,7 @@ import yaml
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 
+from config import AccessToken
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 BASE_DIR = Path(__file__).resolve().parent
@@ -47,5 +48,6 @@ class _Settings(BaseSettings):
 
         raise FileNotFoundError(f"Could not find config.yaml in {path}")
 
-
+class _AccessToken(BaseSettings):
+    AccessToken = AccessToken
 settings = _Settings.load()
