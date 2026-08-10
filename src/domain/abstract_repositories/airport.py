@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from api.v1.airport.shemas import CreateAirportShema
+from api.api_v1.airport.shemas import CreateAirportShema
 from infrastructure.database.postgresql.models import Airport
 
 

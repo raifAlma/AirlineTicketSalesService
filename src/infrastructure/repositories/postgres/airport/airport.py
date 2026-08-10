@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.v1.airport.shemas import CreateAirportShema
+from api.api_v1.airport.shemas import CreateAirportShema
 from domain.abstract_repositories.airport import AbstractAirportRepository
 from infrastructure.database.postgresql.models import Airport
 from infrastructure.repositories.postgres.airport.exception import AirportAlreadyExists
