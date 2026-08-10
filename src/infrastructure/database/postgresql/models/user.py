@@ -19,4 +19,4 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):
-        return SQLAlchemyBaseUserTableUUID(session, cls)
+        return SQLAlchemyUserDatabase(session, cls)

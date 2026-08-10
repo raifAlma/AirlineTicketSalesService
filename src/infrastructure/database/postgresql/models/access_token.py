@@ -8,8 +8,7 @@ from fastapi_users_db_sqlalchemy.access_token import (
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped
-from sqlalchemy.testing.schema import mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from infrastructure.database.postgresql.base import Base
 from infrastructure.database.postgresql.session import get_async_session

@@ -4,12 +4,16 @@ import yaml
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 
-from config import AccessToken
+
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 BASE_DIR = Path(__file__).resolve().parent
 
-__all__ = ("BASE_DIR", "DATETIME_FORMAT", "settings")
+__all__ = (
+    "BASE_DIR",
+    "DATETIME_FORMAT",
+    "settings",
+)
 
 
 class _AppSettings(BaseSettings):
@@ -34,9 +38,16 @@ class _DatabaseSettings(BaseSettings):
         return f"postgresql+asyncpg://{self.user}:{self.password.get_secret_value()}@{self.host}:{self.port}/{self.name}"
 
 
+class _AccessToken(BaseSettings):
+    lifetime_seconds: int = 3600
+    reset_password_token_secret: str
+    verification_token_secret: str
+
 class _Settings(BaseSettings):
     app: _AppSettings
     database: _DatabaseSettings
+    access_token: _AccessToken
+
 
     @classmethod
     def load(cls) -> "_Settings":
@@ -48,6 +59,3 @@ class _Settings(BaseSettings):
 
         raise FileNotFoundError(f"Could not find config.yaml in {path}")
 
-class _AccessToken(BaseSettings):
-    AccessToken = AccessToken
-settings = _Settings.load()

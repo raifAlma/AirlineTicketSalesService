@@ -11,3 +11,9 @@ database:
   host: 'localhost'
   port: 5433
   name: 'flightdb'
+
+
+access_token:
+  lifetime_seconds: 3600
+  reset_password_token_secret: "reset-secret-phrase"
+  verification_token_secret: "verify-secret-phrase"
