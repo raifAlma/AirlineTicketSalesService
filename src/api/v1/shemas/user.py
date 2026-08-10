@@ -12,7 +12,7 @@ class UserRead(schemas.BaseUser[uuid.UUID]):
 class UserCreate(schemas.BaseUserCreate):
     full_name: str
     phone: str
-    role: str = "user"  # значение по умолчанию
+    role: str = "user"
 
 class UserUpdate(schemas.BaseUserUpdate):
     full_name: Optional[str] = None
