@@ -59,3 +59,6 @@ class _Settings(BaseSettings):
 
         raise FileNotFoundError(f"Could not find config.yaml in {path}")
 
+
+print("Looking for config at:", Path(BASE_DIR.parent, "config", "config.yaml"))
+settings = _Settings.load()

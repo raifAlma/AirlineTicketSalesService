@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi_users.authentication.strategy.db import AccessTokenDatabase, DatabaseStrategy
 
 import settings
-from api.api_v1.dependencies.access_tokens import get_access_token_db
+from api.dependencies.authentication.access_tokens import get_access_token_db
 from infrastructure.database.postgresql.models.access_token import AccessToken
 
 
