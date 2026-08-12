@@ -32,5 +32,9 @@ class Booking(Base):
         ForeignKey('flights.id'),
         nullable=False
     )
+    user: Mapped["User"] = relationship(back_populates="bookings")
+    flight: Mapped["Flight"] = relationship(back_populates="bookings")
     booking_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     status: Mapped[BookingStatusType] = mapped_column(Enum(BookingStatusType), default=BookingStatusType.PENDING)
+    booking_seats: Mapped[List["BookingSeat"]] = relationship(back_populates="booking")
+    payment: Mapped["Payment"] = relationship(back_populates="booking")

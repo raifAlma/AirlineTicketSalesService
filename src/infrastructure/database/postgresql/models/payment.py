@@ -3,6 +3,8 @@ from decimal import Decimal
 import enum
 from sqlalchemy import Integer, DECIMAL, String, ForeignKey, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from . import Booking
 from ..base import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
