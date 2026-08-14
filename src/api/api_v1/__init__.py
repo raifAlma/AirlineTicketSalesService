@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer
 
 from .auth import router as auth_router
 from .user import router as user_router
-
+from .messeges import router as messeges_router
 http_bearer = HTTPBearer(auto_error=False)
 
 router = APIRouter(
@@ -13,3 +13,4 @@ router = APIRouter(
 
 router.include_router(auth_router)
 router.include_router(user_router)
+router.include_router(messeges_router)
