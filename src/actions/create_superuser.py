@@ -3,7 +3,7 @@ import contextlib
 
 from api.dependencies.authentication.users import get_user_db
 from api.dependencies.authentication.user_manager import get_user_manager
-from api.shemas.user import UserCreate
+from api.schemas.user import UserCreate
 from infrastructure.authentication.user_manager import UserManager
 from infrastructure.database.postgresql.models import User
 from infrastructure.database.postgresql.session import get_async_session

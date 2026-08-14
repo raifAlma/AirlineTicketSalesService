@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import Depends, HTTPException
 
 from api.api_v1.fastapi_users import current_active_user, current_active_superuser
-from api.shemas.user import UserRead
+from api.schemas.user import UserRead
 from infrastructure.database.postgresql.models import User
 
 router = APIRouter(
