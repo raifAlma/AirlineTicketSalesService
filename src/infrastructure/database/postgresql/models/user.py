@@ -9,8 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..base import Base
 
 class UserRole(str, enum.Enum):
-    PASSENGER = "passenger"
-    MANAGER = "manager"
+    USER = "user"
     ADMIN = "admin"
 
 # passenger — обычный пассажир (просмотр своих бронирований, покупка билетов).
@@ -23,7 +22,7 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     full_name: Mapped[str] = mapped_column(String(128), nullable=False)
     phone: Mapped[str] = mapped_column(String(20), nullable=False)
     role: Mapped[str] = mapped_column(String(128),
-                                      Enum(UserRole),nullable=False, default=UserRole.PASSENGER)
+                                      Enum(UserRole),nullable=False, default=UserRole.USER)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     bookings: Mapped[List['Booking']] = relationship(back_populates='user')
