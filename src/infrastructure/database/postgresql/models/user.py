@@ -12,10 +12,6 @@ class UserRole(str, enum.Enum):
     USER = "user"
     ADMIN = "admin"
 
-# passenger — обычный пассажир (просмотр своих бронирований, покупка билетов).
-# manager — менеджер рейсов (управление рейсами, самолётами, просмотр всех бронирований).
-# admin — администратор (то же, что менеджер, но плюс управление пользователями).
-
 
 class User(Base, SQLAlchemyBaseUserTableUUID):
     __tablename__ = "users"
