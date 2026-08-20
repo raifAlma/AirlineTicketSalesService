@@ -15,8 +15,5 @@ class CreateAirportSchema(BaseModel):
                 f"Airport code must be exactly 3 uppercase letters")
         return v
 
-
-
-
 class ResponseAirportSchema(CreateAirportSchema):
     pass
