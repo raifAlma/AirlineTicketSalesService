@@ -1,0 +1,38 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+    | __pycache__
+    | venv
+    | \.venv
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+lines_after_imports = 2
+skip = ["__init__.py"]
+
+[tool.flake8]
+exclude = [".git", "__pycache__", "venv", "__init__.py", "tools"]
+max-line-length = 88
+ignore = ["E203", "E266", "E501", "W503"]
+max-complexity = 10
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+disallow_untyped_defs = false
+warn_return_any = false
+exclude = ["venv", "tests"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning:passlib.*",
+    "ignore:Accessing argon2.__version__:DeprecationWarning",
+]
