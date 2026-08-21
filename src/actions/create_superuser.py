@@ -1,13 +1,15 @@
 import asyncio
 import contextlib
 
-from api.dependencies.authentication.users import get_user_db
+from fastapi_users.exceptions import UserAlreadyExists
+
 from api.dependencies.authentication.user_manager import get_user_manager
+from api.dependencies.authentication.users import get_user_db
 from api.schemas.user import UserCreate
 from infrastructure.authentication.user_manager import UserManager
 from infrastructure.database.postgresql.models import User
 from infrastructure.database.postgresql.session import get_async_session
-from fastapi_users.exceptions import UserAlreadyExists
+
 
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
 get_user_db_context = contextlib.asynccontextmanager(get_user_db)
@@ -33,7 +35,7 @@ async def create_superuser(
     is_active: bool = True,
     is_superuser: bool = True,
     is_verified: bool = True,
-    role: str = "admin"
+    role: str = "admin",
 ) -> User:
     user_create = UserCreate(
         email=email,
@@ -59,5 +61,3 @@ async def create_superuser(
     except UserAlreadyExists:
         print(f"User {email} already exists")
         raise
-
-

@@ -5,7 +5,6 @@ from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 
 
-
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -43,11 +42,11 @@ class _AccessToken(BaseSettings):
     reset_password_token_secret: str
     verification_token_secret: str
 
+
 class _Settings(BaseSettings):
     app: _AppSettings
     database: _DatabaseSettings
     access_token: _AccessToken
-
 
     @classmethod
     def load(cls) -> "_Settings":

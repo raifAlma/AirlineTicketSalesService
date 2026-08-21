@@ -1,14 +1,15 @@
 import enum
+import uuid
 from datetime import datetime
 from decimal import Decimal
 from typing import List
-import uuid
-from sqlalchemy.dialects.postgresql import UUID
 
-from sqlalchemy import DateTime, DECIMAL, Enum, ForeignKey
+from sqlalchemy import DECIMAL, DateTime, Enum, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..base import Base
+
 
 class StatusType(str, enum.Enum):
     SCHEDULED = "SCHEDULED"
@@ -38,16 +39,16 @@ class Flight(Base):
         Enum(StatusType), nullable=False, default=StatusType.SCHEDULED
     )
 
-    aircraft: Mapped['Aircraft'] = relationship(back_populates="flights")
-    departure_airport: Mapped['Airport'] = relationship(
-        'Airport',
-        foreign_keys='Flight.departure_airport_id',
-        back_populates='departures',
+    aircraft: Mapped["Aircraft"] = relationship(back_populates="flights")
+    departure_airport: Mapped["Airport"] = relationship(
+        "Airport",
+        foreign_keys="Flight.departure_airport_id",
+        back_populates="departures",
     )
-    arrival_airport: Mapped['Airport'] = relationship(
-        'Airport',
-        foreign_keys='Flight.arrival_airport_id',
-        back_populates='arrivals',
+    arrival_airport: Mapped["Airport"] = relationship(
+        "Airport",
+        foreign_keys="Flight.arrival_airport_id",
+        back_populates="arrivals",
     )
 
     seats: Mapped[List["Seat"]] = relationship(

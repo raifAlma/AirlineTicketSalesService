@@ -7,5 +7,3 @@ from infrastructure.database.postgresql.session import get_async_session
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield User.get_db(session=session)
-
-

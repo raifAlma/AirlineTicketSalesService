@@ -1,10 +1,12 @@
 # src/infrastructure/database/postgresql/models/booking_seat.py
 import uuid
 
-from sqlalchemy import Integer, DECIMAL, ForeignKey
+from sqlalchemy import DECIMAL, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from ..base import Base
+
 
 class BookingSeat(Base):
     __tablename__ = "booking_seats"
@@ -14,7 +16,7 @@ class BookingSeat(Base):
         UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False
     )
     seat_id: Mapped[int] = mapped_column(ForeignKey("seats.id"), nullable=False)
-    price_at_booking: Mapped[float] = mapped_column(DECIMAL(10,2), nullable=False)
+    price_at_booking: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False)
 
     booking: Mapped["Booking"] = relationship(back_populates="booking_seats")
     seat: Mapped["Seat"] = relationship(back_populates="booking_seats")

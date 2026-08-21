@@ -6,7 +6,6 @@ from .user import router as user_router
 from .messages import router as messages_router
 from .airport import router as airport_router
 
-
 http_bearer = HTTPBearer(auto_error=False)
 
 router = APIRouter(

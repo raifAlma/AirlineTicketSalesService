@@ -1,16 +1,20 @@
 import os
 from contextlib import asynccontextmanager
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_users.exceptions import UserAlreadyExists
 
 from actions.create_superuser import create_superuser
 from api.api_v1 import router as api_v1_router
-from fastapi_users.exceptions import UserAlreadyExists
 from container import Container
 from settings import settings
-from dotenv import load_dotenv
+
+
 load_dotenv()
 container = Container()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,6 +42,7 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         await sessionmanager.close()
+
 
 app = FastAPI(lifespan=lifespan)
 

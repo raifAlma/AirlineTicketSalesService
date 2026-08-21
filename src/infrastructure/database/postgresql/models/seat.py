@@ -2,15 +2,17 @@ import enum
 import uuid
 from typing import List
 
-from sqlalchemy import String, Integer, Boolean, Enum, ForeignKey
+from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from ..base import Base
 
+
 class SeatType(enum.Enum):
-    ECONOMY = 'Economy'
-    BUSINESS = 'Business'
-    FIRST = 'First'
+    ECONOMY = "Economy"
+    BUSINESS = "Business"
+    FIRST = "First"
 
 
 class Seat(Base):
@@ -24,5 +26,5 @@ class Seat(Base):
     class_type: Mapped[SeatType] = mapped_column(Enum(SeatType), nullable=False)
     is_available: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
-    flight: Mapped['Flight'] = relationship(back_populates="seats")
+    flight: Mapped["Flight"] = relationship(back_populates="seats")
     booking_seats: Mapped[List["BookingSeat"]] = relationship(back_populates="seat")

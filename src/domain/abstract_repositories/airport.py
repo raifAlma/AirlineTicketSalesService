@@ -13,5 +13,5 @@ class AbstractAirportRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_by_id(self, id: AirportIdType ) -> Airport:
+    def get_by_id(self, id: AirportIdType) -> Airport:
         raise NotImplementedError

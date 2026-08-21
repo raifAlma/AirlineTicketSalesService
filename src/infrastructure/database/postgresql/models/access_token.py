@@ -17,9 +17,7 @@ from infrastructure.database.postgresql.session import get_async_session
 class AccessToken(SQLAlchemyBaseAccessTokenTableUUID, Base):
 
     user_id: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("users.id", ondelete="CASCADE"),
-        nullable=False
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
 
     @classmethod
