@@ -7,7 +7,7 @@ class AirportError(Exception):
 class AirportAlreadyExists(AirportError):
     def __init__(self, code: str | None = None):
         self.code = code
-        message = f"Airport with code {code!r} already exists" if code else "Airport already exists"
+        message = f"Airport with code {code!r} already exists" if code else "Airport already exists, check the entered data"
         super().__init__(message)
 
 
