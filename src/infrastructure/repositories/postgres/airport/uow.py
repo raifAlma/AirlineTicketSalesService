@@ -16,7 +16,8 @@ class PostgreSQLAirportUnitOfWork:
     async def __aexit__(self, exc_type: Exception | None, exc_val, traceback):
         if exc_type is not None:
             await self.rollback()
-        await self.commit()
+        else:
+            await self.commit()
 
         await self._session.close()
         self.repository = None
