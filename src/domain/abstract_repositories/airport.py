@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from uuid import UUID
+from typing import List
 
 from domain.entities import AirportCreateData
 from infrastructure.database.postgresql.models import Airport
@@ -14,4 +14,8 @@ class AbstractAirportRepository(ABC):
 
     @abstractmethod
     def get_by_id(self, id: AirportIdType) -> Airport:
+        raise NotImplementedError
+
+    @abstractmethod
+    def search (self, query: str) -> List[Airport]:
         raise NotImplementedError
