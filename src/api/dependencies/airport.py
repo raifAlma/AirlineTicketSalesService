@@ -7,6 +7,7 @@ from infrastructure.repositories.postgres.airport import PostgreSQLAirportUnitOf
 from usecases.airport.create.implementation import (
     PostgreSQLCreateAirportUseCase,
 )
+from usecases.airport.delete.implementation import PostgreSQLDeleteAirportUseCase
 from usecases.airport.get.implementation import PostgreSQLGetAirportUseCase
 from usecases.airport.search.implementation import PostgreSQLSearchAirportUseCase
 
@@ -35,3 +36,9 @@ def search_airport_use_case(
 ):
     uow = get_airport_unit_of_work(session)
     return PostgreSQLSearchAirportUseCase(uow=uow)
+
+def delete_airport_use_case(
+        session: AsyncSession = Depends(get_async_session),
+):
+    uow = get_airport_unit_of_work(session)
+    return PostgreSQLDeleteAirportUseCase(uow=uow)

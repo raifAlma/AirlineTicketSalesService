@@ -19,3 +19,7 @@ class AbstractAirportRepository(ABC):
     @abstractmethod
     def search (self, query: str) -> List[Airport]:
         raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, id: AirportIdType) -> None:
+        raise NotImplementedError

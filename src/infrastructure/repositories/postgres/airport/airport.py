@@ -51,3 +51,12 @@ class PostgreSQLAirportRepository(AbstractAirportRepository):
         result = await self.session.execute(stmt)
         airport = result.scalars().all()
         return List(airport)
+
+    async def delete(self, id: AirportIdType) -> None:
+        smt = select(Airport).where(Airport.id == id)
+        res = await self.session.execute(smt)
+        airport = res.scalar_one_or_none()
+        if airport is None:
+            raise AirportNotFound(airport_id=id)
+        await self.session.delete(airport)
+        await self.session.flush()
