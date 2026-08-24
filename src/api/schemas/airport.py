@@ -1,4 +1,14 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field, ValidationError, field_validator
+
+
+def validate_code(v: str | None) -> str | None:
+    if v is None:
+        return v
+    if not (len(v) == 3 and v.isalpha() and v.isupper()):
+        raise ValueError(f"Airport code must be exactly 3 uppercase letters")
+    return v
 
 
 class CreateAirportSchema(BaseModel):
@@ -9,11 +19,20 @@ class CreateAirportSchema(BaseModel):
 
     @field_validator("code")
     @classmethod
-    def validate_code(cls, v):
-        if not (len(v) == 3 and v.isalpha() and v.isupper()):
-            raise ValueError(f"Airport code must be exactly 3 uppercase letters")
-        return v
+    def create_validate_code(cls, v):
+        return validate_code(v)
 
 
 class ResponseAirportSchema(CreateAirportSchema):
     pass
+
+class UpdateAirportSchema(BaseModel):
+    code: Optional[str] = None
+    name: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+
+    @field_validator("code")
+    @classmethod
+    def update_validate_code(cls, v):
+        return validate_code(v)
