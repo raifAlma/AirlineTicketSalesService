@@ -1,0 +1,60 @@
+# План написания тестов
+
+## 1. ✅ Unit-тесты на AirportCreateData
+- [ ] Граничные значения: 100, 101, 1 символ для `code`
+- [ ] Невалидный `code`: слишком короткий, слишком длинный, содержит цифры
+- [ ] Проверка `frozen=True` (модель неизменяема)
+- [ ] Дополнить файл `tests/domain/test_airport.py`
+
+## 2. ⚙️ Настройка тестовой БД (conftest.py + fixtures)
+- [ ] Создать `tests/conftest.py`
+- [ ] Фикстура `db_session`, дающая чистую `AsyncSession` на каждый тест
+- [ ] Использовать отдельную тестовую БД или транзакции с откатом
+
+## 3. 🧪 Unit-тесты на PostgreSQLAirportRepository
+- [ ] `create()` — успешное создание
+- [ ] `create()` с дубликатом → `AirportAlreadyExists`
+- [ ] `get_by_id()` — найден
+- [ ] `get_by_id()` — не найден → `AirportNotFound`
+- [ ] `search()` — находит по `name`, `city`, `code`
+- [ ] `search()` без результатов → пустой список (НЕ исключение!)
+- [ ] Файл: `tests/infrastructure/repositories/test_airport_repository.py`
+
+## 4. 🧪 UseCase-тесты с fake-репозиторием
+- [ ] Создать in-memory репозиторий (реализует `AbstractAirportRepository`)
+- [ ] `CreateAirportUseCase`
+- [ ] `GetAirportUseCase`
+- [ ] `SearchAirportUseCase`
+- [ ] Проверить, что исключения пробрасываются дальше
+- [ ] Файл: `tests/usecases/test_airport_usecases.py`
+
+## 5. 🌐 API-тесты на /airport эндпоинты
+- [ ] Установить `httpx`
+- [ ] `POST /airport` → 201 + тело, 400 на дубликат, 401/403 без прав суперюзера, 422 на невалидный `code`
+- [ ] `GET /airport/{id}` → 200 + 404
+- [ ] `GET /airport/search` → 200 + [] (пустой результат, без авторизации)
+- [ ] Проверить, что порядок роутов `/search` и `/{id}` корректен
+- [ ] Файл: `tests/api/test_airport_endpoints.py`
+
+## 6. 🔐 API-тесты на auth/users
+- [ ] `register` → 201
+- [ ] `register` с дублирующимся email → 400
+- [ ] `login` без верификации → 400 (`LOGIN_USER_NOT_VERIFIED`)
+- [ ] `login` с правильными данными после `verify` → 200 + токен
+- [ ] `users/me` без токена → 401
+- [ ] `PATCH users/{id}` обычным пользователем → 403 (не суперюзер)
+- [ ] Файл: `tests/api/test_auth_endpoints.py`
+
+## 7. 📐 Unit-тесты на UserCreate/UserUpdate схемы
+- [ ] `phone_validator` отклоняет буквы и короткий телефон
+- [ ] `phone_validator` принимает валидный телефон (с `+` и без)
+- [ ] `role` в `UserCreate` нельзя передать отличным от `'user'` (через `Literal`)
+- [ ] Файл: `tests/domain/test_user_schema.py`
+
+## 8. 🔄 Повторить для новых сущностей (например, Booking)
+- [ ] Следовать шагам 1–5
+- [ ] Акцент на бизнес-логику: 0 свободных мест, race condition, отмена бронирования, возврат мест
+
+pytest -v                  # подробный вывод
+pytest -s                  # показывает print() в консоли
+pytest --tb=short          # сокращённый трейсбэк при ошибках
