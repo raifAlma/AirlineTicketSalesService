@@ -40,3 +40,7 @@ def test_create_airport_with_empty_city_raises_error():
 def test_create_airport_with_empty_field_raises_error(field_name, kwargs):
     with pytest.raises(InvalidAirportField):
         AirportCreateData(**kwargs)
+
+def create_airport_with_city_101_symbol_raises_error():
+    with pytest.raises(InvalidAirportCode):
+        AirportCreateData(code='AAA', name="Heathrow", city="London" * 101, country="UK")
