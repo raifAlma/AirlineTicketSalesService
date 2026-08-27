@@ -11,4 +11,4 @@ class PostgreSQLSearchAirportUseCase(AbstractSearchAirportUseCase):
     async def execute(self, query: str) -> List[Airport]:
         async with self._uow as uow:
             airport = await uow.repository.search(query)
-            return List(airport)
+            return airport
