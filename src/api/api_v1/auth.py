@@ -13,7 +13,7 @@ router = APIRouter(
 # /login
 # /logout
 router.include_router(
-    fastapi_users.get_auth_router(authentication_backend, requires_verification=True)
+    fastapi_users.get_auth_router(authentication_backend, requires_verification=False)
 )
 # /register
 router.include_router(
