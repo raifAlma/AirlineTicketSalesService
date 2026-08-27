@@ -1,13 +1,17 @@
-
 class AirportError(Exception):
     """Базовое исключение для всех ошибок, связанных с Airport."""
+
     pass
 
 
 class AirportAlreadyExists(AirportError):
     def __init__(self, code: str | None = None):
         self.code = code
-        message = f"Airport with code {code!r} already exists" if code else "Airport already exists, check the entered data"
+        message = (
+            f"Airport with code {code!r} already exists"
+            if code
+            else "Airport already exists, check the entered data"
+        )
         super().__init__(message)
 
 

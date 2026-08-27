@@ -17,7 +17,7 @@ class AbstractAirportRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def search (self, query: str) -> List[Airport]:
+    def search(self, query: str) -> List[Airport]:
         raise NotImplementedError
 
     @abstractmethod

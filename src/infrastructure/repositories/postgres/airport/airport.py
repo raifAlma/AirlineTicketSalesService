@@ -1,12 +1,15 @@
 from typing import List
-from fastapi import HTTPException
-from sqlalchemy import select,  or_
+
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.schemas.airport import CreateAirportSchema
 from domain.abstract_repositories.airport import AbstractAirportRepository
 from infrastructure.database.postgresql.models import Airport
-from infrastructure.repositories.postgres.airport.exception import AirportAlreadyExists, AirportNotFound
+from infrastructure.repositories.postgres.airport.exception import (
+    AirportAlreadyExists,
+    AirportNotFound,
+)
 from infrastructure.types import AirportIdType
 
 
@@ -39,18 +42,18 @@ class PostgreSQLAirportRepository(AbstractAirportRepository):
             raise AirportNotFound(airport_id=id)
         return airport
 
-    async def search (self, query: str) -> List[Airport]:
+    async def search(self, query: str) -> List[Airport]:
         pattern = f"%{query}%"
         stmt = select(Airport).where(
-        or_(
-            Airport.name.ilike(pattern),
-            Airport.city.ilike(pattern),
-            Airport.code == query.upper(),
+            or_(
+                Airport.name.ilike(pattern),
+                Airport.city.ilike(pattern),
+                Airport.code == query.upper(),
+            )
         )
-    )
         result = await self.session.execute(stmt)
         airport = result.scalars().all()
-        return List(airport)
+        return airport
 
     async def delete(self, id: AirportIdType) -> None:
         smt = select(Airport).where(Airport.id == id)

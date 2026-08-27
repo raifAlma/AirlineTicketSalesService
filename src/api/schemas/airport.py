@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field, ValidationError, field_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 
 def validate_code(v: str | None) -> str | None:
@@ -27,6 +27,7 @@ class CreateAirportSchema(BaseModel):
 class ResponseAirportSchema(CreateAirportSchema):
     id: UUID
     model_config = ConfigDict(from_attributes=True)
+
 
 class UpdateAirportSchema(BaseModel):
     code: Optional[str] = None

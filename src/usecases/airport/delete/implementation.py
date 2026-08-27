@@ -9,5 +9,4 @@ class PostgreSQLDeleteAirportUseCase(AbstractDeleteAirportUseCase):
 
     async def execute(self, id: AirportIdType) -> None:
         async with self._uow as uow:
-           await uow.repository.delete(id)
-
+            await uow.repository.delete(id)

@@ -31,14 +31,16 @@ def get_by_id_airport_use_case(
     uow = get_airport_unit_of_work(session)
     return PostgreSQLGetAirportUseCase(uow=uow)
 
+
 def search_airport_use_case(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     uow = get_airport_unit_of_work(session)
     return PostgreSQLSearchAirportUseCase(uow=uow)
 
+
 def delete_airport_use_case(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     uow = get_airport_unit_of_work(session)
     return PostgreSQLDeleteAirportUseCase(uow=uow)
