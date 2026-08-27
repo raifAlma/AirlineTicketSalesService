@@ -1,6 +1,18 @@
-import pytest
+import uuid
+from unittest.mock import AsyncMock
 
-from src.domain.entities.airport import AirportCreateData, InvalidAirportCode, InvalidAirportField
+import pytest
+from httpx import ASGITransport, AsyncClient
+
+from app import app
+from infrastructure.database.postgresql.models import Airport
+from infrastructure.repositories.postgres.airport.exception import AirportNotFound
+from src.domain.entities.airport import (
+    AirportCreateData,
+    InvalidAirportCode,
+    InvalidAirportField,
+)
+from usecases.airport.get.implementation import PostgreSQLGetAirportUseCase
 
 
 def test_create_airport_with_valid_data_succeeds():
@@ -25,9 +37,11 @@ def test_create_airport_with_lowercase_code_raises_error():
     with pytest.raises(InvalidAirportCode):
         AirportCreateData(code="lhr", name="Heathrow", city="London", country="UK")
 
+
 def test_create_airport_with_empty_city_raises_error():
     with pytest.raises(InvalidAirportField):
         AirportCreateData(code="HDH", name="simf", city="", country="UK")
+
 
 @pytest.mark.parametrize(
     "field_name, kwargs",
@@ -41,6 +55,9 @@ def test_create_airport_with_empty_field_raises_error(field_name, kwargs):
     with pytest.raises(InvalidAirportField):
         AirportCreateData(**kwargs)
 
+
 def create_airport_with_city_101_symbol_raises_error():
     with pytest.raises(InvalidAirportCode):
-        AirportCreateData(code='AAA', name="Heathrow", city="London" * 101, country="UK")
+        AirportCreateData(
+            code="AAA", name="Heathrow", city="London" * 101, country="UK"
+        )
