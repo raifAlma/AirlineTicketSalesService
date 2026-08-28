@@ -1,1 +1,1 @@
-from .airport import AirportCreateData
+from .airport import AirportCreateData, AirportUpdateData
