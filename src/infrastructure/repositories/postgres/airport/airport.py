@@ -1,14 +1,16 @@
+from dataclasses import asdict
 from typing import List
 
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.schemas.airport import CreateAirportSchema
+from api.schemas.airport import CreateAirportSchema, UpdateAirportSchema
 from domain.abstract_repositories.airport import AbstractAirportRepository
+from domain.entities import AirportUpdateData
 from infrastructure.database.postgresql.models import Airport
 from infrastructure.repositories.postgres.airport.exception import (
     AirportAlreadyExists,
-    AirportNotFound,
+    AirportNotFound, InvalidAirportData,
 )
 from infrastructure.types import AirportIdType
 
@@ -63,3 +65,27 @@ class PostgreSQLAirportRepository(AbstractAirportRepository):
             raise AirportNotFound(airport_id=id)
         await self.session.delete(airport)
         await self.session.flush()
+
+
+    async def update(self, id: AirportIdType, payload: AirportUpdateData) -> Airport:
+        stmt = select(Airport).where(Airport.id == id)
+        res = await self.session.execute(stmt)
+        airport = res.scalar_one_or_none()
+        if not airport:
+            raise AirportNotFound(id)
+
+        update_data = {k: v for k, v in asdict(payload).items() if v is not None}
+        if "code" in update_data:
+            new_code = update_data["code"]
+            exists = await self.session.scalar(
+                select(1).where(Airport.code == new_code, Airport.id != id)
+            )
+            if exists:
+                raise AirportAlreadyExists(code=new_code)
+
+        for field, value in update_data.items():
+            if hasattr(airport, field):
+                setattr(airport, field, value)
+
+        await self.session.flush()
+        return airport

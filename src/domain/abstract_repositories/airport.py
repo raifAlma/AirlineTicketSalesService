@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from domain.entities import AirportCreateData
+from domain.entities import AirportCreateData, AirportUpdateData
 from infrastructure.database.postgresql.models import Airport
 from infrastructure.types import AirportIdType
 
@@ -22,4 +22,8 @@ class AbstractAirportRepository(ABC):
 
     @abstractmethod
     def delete(self, id: AirportIdType) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update(self, id: AirportIdType, payload: AirportUpdateData) -> Airport:
         raise NotImplementedError
