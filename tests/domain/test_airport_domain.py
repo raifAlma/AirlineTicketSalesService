@@ -61,3 +61,5 @@ def create_airport_with_city_101_symbol_raises_error():
         AirportCreateData(
             code="AAA", name="Heathrow", city="London" * 101, country="UK"
         )
+
+
