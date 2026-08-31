@@ -45,11 +45,11 @@ class AirportUpdateData:
         if self.code is not None:
             self._validate_code()
         if self.name is not None:
-            self._validate_length("name", self.name)
+            self._validate_length("name", self.name, 3)
         if self.city is not None:
-            self._validate_length("city", self.city)
+            self._validate_length("city", self.city, 1)
         if self.country is not None:
-            self._validate_length("country", self.country)
+            self._validate_length("country", self.country, 3)
 
     def _validate_code(self):
         if not (len(self.code) == 3 and self.code.isalpha() and self.code.isupper()):
@@ -57,8 +57,8 @@ class AirportUpdateData:
                 f"Airport code must be exactly 3 uppercase letters, got {self.code!r}"
             )
 
-    def _validate_length(self, field_name: str, value: str):
-        if not (1 <= len(value) <= 100):
+    def _validate_length(self, field_name: str, value: str, min_length: int = 1):
+        if not (min_length <= len(value) <= 100):
             raise InvalidAirportField(
                 f"{field_name} must be between 1 and 100 characters, got {len(value)}"
             )
