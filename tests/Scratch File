@@ -58,3 +58,52 @@
 pytest -v                  # подробный вывод
 pytest -s                  # показывает print() в консоли
 pytest --tb=short          # сокращённый трейсбэк при ошибках
+
+
+
+import asyncio
+from unittest.mock import AsyncMock
+
+
+# ==== упрощённые версии ваших реальных классов ====
+
+class UpdateAirportSchema:
+    def __init__(self, name=None):
+        self.name = name
+
+
+class PostgreSQLUpdateAirportUseCase:
+    def __init__(self, uow):
+        self._uow = uow
+
+    async def execute(self, id, payload):
+        async with self._uow as uow:
+            airport = await uow.repository.update(id, payload)
+        return airport
+
+
+async def main():
+    # ШАГ 1: создаём mock-репозиторий -- фальшивку с методом update()
+    mock_repo = AsyncMock()
+    mock_repo.update.return_value = "Airport(fake result)"
+
+    # ШАГ 2: создаём mock UoW -- он должен вести себя как ваш реальный UoW
+    #         (то есть поддерживать async with ... as uow)
+    mock_uow = AsyncMock()
+    mock_uow.__aenter__.return_value = mock_uow   # при входе в with, вернуть САМ mock_uow
+    mock_uow.repository = mock_repo                # а у него уже есть repository = mock_repo
+
+    # ШАГ 3: создаём usecase, но подсовываем ему MOCK uow, а не настоящий
+    usecase = PostgreSQLUpdateAirportUseCase(uow=mock_uow)
+
+    # ШАГ 4: вызываем execute -- НИКАКОЙ реальной БД тут нет вообще
+    payload = UpdateAirportSchema(name="New Heathrow")
+    result = await usecase.execute("airport-id-123", payload)
+
+    print("Результат:", result)
+
+    # ШАГ 5: ПРОВЕРЯЕМ -- был ли repository.update() вызван с ПРАВИЛЬНЫМИ аргументами
+    mock_repo.update.assert_called_once_with("airport-id-123", payload)
+    print("✅ Тест прошёл: usecase вызвал repository.update() с правильными аргументами!")
+
+asyncio.run(main())
