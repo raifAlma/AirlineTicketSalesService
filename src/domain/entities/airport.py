@@ -34,6 +34,7 @@ class AirportCreateData:
                 f"{field_name} must be between 1 and 100 characters, got {len(value)}"
             )
 
+
 @dataclass(frozen=True)
 class AirportUpdateData:
     code: str | None
@@ -62,5 +63,3 @@ class AirportUpdateData:
             raise InvalidAirportField(
                 f"{field_name} must be between 1 and 100 characters, got {len(value)}"
             )
-
-

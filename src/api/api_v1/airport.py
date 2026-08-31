@@ -9,8 +9,12 @@ from api.dependencies.airport import (
     search_airport_use_case,
     update_airport_use_case,
 )
-from api.schemas.airport import CreateAirportSchema, ResponseAirportSchema, UpdateAirportSchema
-from domain.entities.airport import InvalidAirportField, InvalidAirportCode
+from api.schemas.airport import (
+    CreateAirportSchema,
+    ResponseAirportSchema,
+    UpdateAirportSchema,
+)
+from domain.entities.airport import InvalidAirportCode, InvalidAirportField
 from infrastructure.database.postgresql.models import User
 from infrastructure.repositories.postgres.airport.exception import (
     AirportAlreadyExists,
@@ -76,12 +80,13 @@ async def delete_airport(
         raise HTTPException(status_code=404, detail=str(e))
     return None
 
+
 @router.put("/{id}", response_model=ResponseAirportSchema, status_code=200)
 async def update_airport(
-        id: AirportIdType,
-        payload: UpdateAirportSchema,
-        usecase: AbstractUpdateAirportUseCase = Depends(update_airport_use_case),
-        _: User = Depends(current_active_superuser),
+    id: AirportIdType,
+    payload: UpdateAirportSchema,
+    usecase: AbstractUpdateAirportUseCase = Depends(update_airport_use_case),
+    _: User = Depends(current_active_superuser),
 ):
     try:
         airport = await usecase.execute(id, payload)

@@ -46,8 +46,9 @@ def delete_airport_use_case(
     uow = get_airport_unit_of_work(session)
     return PostgreSQLDeleteAirportUseCase(uow=uow)
 
+
 def update_airport_use_case(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     uow = get_airport_unit_of_work(session)
     return PostgreSQLUpdateAirportUseCase(uow=uow)

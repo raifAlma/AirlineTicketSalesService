@@ -10,7 +10,8 @@ from domain.entities import AirportUpdateData
 from infrastructure.database.postgresql.models import Airport
 from infrastructure.repositories.postgres.airport.exception import (
     AirportAlreadyExists,
-    AirportNotFound, InvalidAirportData,
+    AirportNotFound,
+    InvalidAirportData,
 )
 from infrastructure.types import AirportIdType
 
@@ -65,7 +66,6 @@ class PostgreSQLAirportRepository(AbstractAirportRepository):
             raise AirportNotFound(airport_id=id)
         await self.session.delete(airport)
         await self.session.flush()
-
 
     async def update(self, id: AirportIdType, payload: AirportUpdateData) -> Airport:
         stmt = select(Airport).where(Airport.id == id)
