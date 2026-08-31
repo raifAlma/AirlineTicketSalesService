@@ -13,5 +13,5 @@ class PostgreSQLUpdateAirportUseCase(AbstractUpdateAirportUseCase):
                 name=payload.name, code=payload.code, city=payload.city, country=payload.country
             )
             async with self._uow as uow:
-                airport = await uow.repository.update( id ,data)
+                airport = await uow.repository.update(id ,data)
             return airport

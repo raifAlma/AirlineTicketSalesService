@@ -10,6 +10,7 @@ from usecases.airport.create.implementation import (
 from usecases.airport.delete.implementation import PostgreSQLDeleteAirportUseCase
 from usecases.airport.get.implementation import PostgreSQLGetAirportUseCase
 from usecases.airport.search.implementation import PostgreSQLSearchAirportUseCase
+from usecases.airport.update.implementation import PostgreSQLUpdateAirportUseCase
 
 
 def get_airport_unit_of_work(
@@ -44,3 +45,9 @@ def delete_airport_use_case(
 ):
     uow = get_airport_unit_of_work(session)
     return PostgreSQLDeleteAirportUseCase(uow=uow)
+
+def update_airport_use_case(
+        session: AsyncSession = Depends(get_async_session),
+):
+    uow = get_airport_unit_of_work(session)
+    return PostgreSQLUpdateAirportUseCase(uow=uow)
