@@ -12,7 +12,6 @@ from ..base import Base
 class SeatType(enum.Enum):
     ECONOMY = "Economy"
     BUSINESS = "Business"
-    FIRST = "First"
 
 
 class Seat(Base):
