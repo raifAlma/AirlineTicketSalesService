@@ -23,8 +23,7 @@ class AircraftCreateData:
         self._validate_business_rows()
 
     def _validate_model(self):
-        if 1 > len(self.model) > 100:
-            raise InvalidAircraftName(
+        if not (1 <= len(self.model) <= 100):            raise InvalidAircraftName(
                 f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
             )
 
