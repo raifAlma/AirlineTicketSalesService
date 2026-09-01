@@ -14,5 +14,8 @@ class Aircraft(Base):
     rows: Mapped[int] = mapped_column(Integer, nullable=False)
     seats_per_row: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
     business_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    # capacity можно вычислять: rows * seats_per_row
     flights: Mapped[list[Flight]] = relationship(back_populates="aircraft")
+
+    @property
+    def capacity(self) -> int:
+        return self.rows * self.seats_per_row

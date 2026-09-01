@@ -13,6 +13,11 @@ class AircraftCreateData:
     seats_per_row: int
     business_rows: int
 
+    @property
+    def capacity(self) -> int:
+        return self.rows * self.seats_per_row
+
+
     def __post_init__(self):
         self._validate_model()
         self._validate_business_rows()
