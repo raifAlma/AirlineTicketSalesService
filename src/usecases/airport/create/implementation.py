@@ -1,6 +1,6 @@
 from api.schemas.airport import CreateAirportSchema
 from domain.entities import AirportCreateData
-from usecases.airport.create.abstract import (  # ← путь №3, вообще другой
+from usecases.airport.create.abstract import (
     AbstractCreateAirportUseCase,
 )
 
