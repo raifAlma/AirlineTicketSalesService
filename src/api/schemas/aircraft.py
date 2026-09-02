@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field, model_validator
+from uuid import UUID
+
+from pydantic import BaseModel, Field, model_validator, computed_field, ConfigDict
 
 
 class CreateAircraftSchema(BaseModel):
@@ -14,3 +16,16 @@ class CreateAircraftSchema(BaseModel):
                 f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
             )
         return self
+
+class ResponseAircraftSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    model: str
+    rows: int
+    seats_per_row: int
+    business_rows: int
+    @computed_field
+    @property
+    def capacity(self) -> int:
+        return self.rows * self.seats_per_row
