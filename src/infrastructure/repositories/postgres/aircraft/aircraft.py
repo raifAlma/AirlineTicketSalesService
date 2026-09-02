@@ -44,3 +44,13 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
         result = await self.session.execute(smt)
         aircraft = result.scalars().all()
         return aircraft
+
+    async def delete(self, id: AircraftIdType) -> None:
+        smt = select(Aircraft).where(Aircraft.id == id)
+        result = await self.session.execute(smt)
+        aircraft = result.scalar_one_or_none()
+        if not aircraft:
+            raise AircraftNotFound(id=id)
+        await self.session.delete(aircraft)
+        await self.session.flush()
+
