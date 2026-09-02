@@ -4,7 +4,9 @@ from sqlalchemy import select
 from domain.abstract_repositories.aircraft import AbstractAircraftRepository
 from domain.entities.aircraft import AircraftCreateData
 from infrastructure.database.postgresql.models import Aircraft
-from infrastructure.repositories.postgres.aircraft.exception import AircraftAlreadyExists
+from infrastructure.repositories.postgres.aircraft.exception import AircraftAlreadyExists, AircraftNotFound
+from infrastructure.types import AircraftIdType
+
 
 class PostgreSQLAircraftRepository(AbstractAircraftRepository):
     def __init__(self, session: AsyncSession):
@@ -26,4 +28,11 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
         await self.session.flush()
         return aircraft
 
+    async def get_by_id(self, id: AircraftIdType) -> Aircraft:
+        smt = select(Aircraft).where(Aircraft.id == id)
+        result = await self.session.execute(smt)
+        aircraft = result.scalar_one_or_none()
+        if not aircraft:
+            raise AircraftNotFound(id=id)
+        return aircraft
 
