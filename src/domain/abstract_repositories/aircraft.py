@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from domain.entities.aircraft import AircraftCreateData
 from infrastructure.database.postgresql.models import Aircraft
@@ -13,4 +14,8 @@ class AbstractAircraftRepository(ABC):
 
     @abstractmethod
     async def get_by_id(self, id: AircraftIdType) -> Aircraft:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def search(self, pattern: str) -> List[Aircraft]:
         raise NotImplementedError
