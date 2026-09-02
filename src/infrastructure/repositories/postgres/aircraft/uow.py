@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infrastructure.repositories.postgres.aircraft.aircraft import PostgreSQLAircraftRepository
+from infrastructure.repositories.postgres.aircraft.aircraft import (
+    PostgreSQLAircraftRepository,
+)
 from infrastructure.repositories.postgres.airport import PostgreSQLAirportRepository
 
 

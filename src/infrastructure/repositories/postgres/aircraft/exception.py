@@ -17,10 +17,9 @@ class AircraftAlreadyExists(AircraftError):
         )
         super().__init__(message)
 
+
 class AircraftNotFound(AircraftError):
     def __init__(self, id: AircraftIdType | None = None):
         self.id = id
-        message = (
-            f"Aircraft with id {id!r} does not exist"
-        )
+        message = f"Aircraft with id {id!r} does not exist"
         super().__init__(message)

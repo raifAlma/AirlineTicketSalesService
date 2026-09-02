@@ -1,12 +1,15 @@
 from typing import List
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.aircraft import AbstractAircraftRepository
 from domain.entities.aircraft import AircraftCreateData
 from infrastructure.database.postgresql.models import Aircraft
-from infrastructure.repositories.postgres.aircraft.exception import AircraftAlreadyExists, AircraftNotFound
+from infrastructure.repositories.postgres.aircraft.exception import (
+    AircraftAlreadyExists,
+    AircraftNotFound,
+)
 from infrastructure.types import AircraftIdType
 
 
@@ -22,9 +25,9 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
             raise AircraftAlreadyExists(model=payload.model)
         aircraft = Aircraft(
             model=payload.model,
-            rows = payload.rows,
-            seats_per_row = payload.seats_per_row,
-            business_rows = payload.business_rows,
+            rows=payload.rows,
+            seats_per_row=payload.seats_per_row,
+            business_rows=payload.business_rows,
         )
         self.session.add(aircraft)
         await self.session.flush()
@@ -53,4 +56,3 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
             raise AircraftNotFound(id=id)
         await self.session.delete(aircraft)
         await self.session.flush()
-

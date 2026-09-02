@@ -11,8 +11,10 @@ class PostgreSQLCreateAircraftUseCase(AbstractCreateAircraftUseCase):
 
     async def execute(self, schema: CreateAircraftSchema):
         data = AircraftCreateData(
-            model=schema.model, rows=schema.rows,
-            seats_per_row=schema.seats_per_row, business_rows=schema.business_rows
+            model=schema.model,
+            rows=schema.rows,
+            seats_per_row=schema.seats_per_row,
+            business_rows=schema.business_rows,
         )
         async with self._uow as uow:
             aicraft = await uow.repository.create(data)

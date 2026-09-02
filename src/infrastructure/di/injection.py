@@ -10,6 +10,7 @@ def build_airport_unit_of_work(
 ) -> PostgreSQLAirportUnitOfWork:
     return Container.airport_uow_factory(session=session)
 
+
 def build_aircraft_unit_of_work(
     session: AsyncSession,
 ) -> PostgreSQLAircraftUnitOfWork:

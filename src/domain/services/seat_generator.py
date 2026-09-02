@@ -1,4 +1,4 @@
-from domain.entities.seat import SeatBlueprint  
+from domain.entities.seat import SeatBlueprint
 
 
 def generate_seat_layout(

@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, Field, model_validator, computed_field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
 
 
 class CreateAircraftSchema(BaseModel):
@@ -17,6 +17,7 @@ class CreateAircraftSchema(BaseModel):
             )
         return self
 
+
 class ResponseAircraftSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -25,6 +26,7 @@ class ResponseAircraftSchema(BaseModel):
     rows: int
     seats_per_row: int
     business_rows: int
+
     @computed_field
     @property
     def capacity(self) -> int:
