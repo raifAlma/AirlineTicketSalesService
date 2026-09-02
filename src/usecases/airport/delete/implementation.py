@@ -1,4 +1,3 @@
-from infrastructure.database.postgresql.models import Airport
 from infrastructure.types import AirportIdType
 from usecases.airport.delete.abstract import AbstractDeleteAirportUseCase
 
