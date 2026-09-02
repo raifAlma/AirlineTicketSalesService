@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -36,3 +38,9 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
             raise AircraftNotFound(id=id)
         return aircraft
 
+    async def search(self, query: str) -> List[Aircraft]:
+        pattern = f"%{query}%"
+        smt = select(Aircraft).where(Aircraft.model.ilike(pattern))
+        result = await self.session.execute(smt)
+        aircraft = result.scalars().all()
+        return aircraft
