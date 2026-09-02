@@ -17,5 +17,5 @@ class AbstractAircraftRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def search(self, pattern: str) -> List[Aircraft]:
+    async def search(self, query: str) -> List[Aircraft]:
         raise NotImplementedError
