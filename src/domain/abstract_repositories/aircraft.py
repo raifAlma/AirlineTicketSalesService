@@ -19,3 +19,7 @@ class AbstractAircraftRepository(ABC):
     @abstractmethod
     async def search(self, query: str) -> List[Aircraft]:
         raise NotImplementedError
+
+    @abstractmethod
+    async def delete(self, id: AircraftIdType) -> None:
+        raise NotImplementedError
