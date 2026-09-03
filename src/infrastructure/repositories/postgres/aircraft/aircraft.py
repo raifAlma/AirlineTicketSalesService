@@ -1,10 +1,11 @@
+from dataclasses import asdict
 from typing import List
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.aircraft import AbstractAircraftRepository
-from domain.entities.aircraft import AircraftCreateData
+from domain.entities.aircraft import AircraftCreateData, AircraftUpdateData
 from infrastructure.database.postgresql.models import Aircraft
 from infrastructure.repositories.postgres.aircraft.exception import (
     AircraftAlreadyExists,
@@ -56,3 +57,24 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
             raise AircraftNotFound(id=id)
         await self.session.delete(aircraft)
         await self.session.flush()
+
+    async def update(self, id: AircraftIdType, payload: AircraftUpdateData):
+        smt = select(Aircraft).where(Aircraft.id == id)
+        result = await self.session.execute(smt)
+        existing_aircraft = result.scalar_one_or_none()
+        if not existing_aircraft:
+            raise AircraftNotFound(id=id)
+
+        update_data = {k:v for k, v in asdict(payload).items() if v is not None}
+        if 'model' in update_data:
+            new_model = update_data['model']
+            exists = await self.session.scalar(select(Aircraft).where
+                                               (Aircraft.model == new_model,
+                                                Aircraft.id != id))
+            if exists:
+                raise AircraftAlreadyExists(model=new_model)
+
+            for field, value in update_data.items():
+                if hasattr(existing_aircraft, field):
+                    setattr(existing_aircraft, field, value)
+
