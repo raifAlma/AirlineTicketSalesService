@@ -14,6 +14,8 @@ def validate_model(self):
 
 
 def validate_business_rows(self):
+    if self.rows is None or self.business_rows is None:
+        return
     if self.business_rows > self.rows:
         raise InvalidQuantityBusinessRows(
             f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
