@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 
+
 class InvalidAircraftName(ValueError):
     pass
 
+
 class InvalidQuantityBusinessRows(ValueError):
     pass
+
 
 @dataclass
 class AircraftCreateData:
@@ -17,13 +20,13 @@ class AircraftCreateData:
     def capacity(self) -> int:
         return self.rows * self.seats_per_row
 
-
     def __post_init__(self):
         self._validate_model()
         self._validate_business_rows()
 
     def _validate_model(self):
-        if not (1 <= len(self.model) <= 100):            raise InvalidAircraftName(
+        if not (1 <= len(self.model) <= 100):
+            raise InvalidAircraftName(
                 f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
             )
 
@@ -33,3 +36,26 @@ class AircraftCreateData:
                 f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
             )
 
+
+@dataclass
+class AircraftUpdateData:
+    model: str | None
+    rows: int | None
+    seats_per_row: int | None
+    business_rows: int | None
+
+    def __post_init__(self):
+        self._validate_model()
+        self._validate_business_rows()
+
+    def _validate_model(self):
+        if not (1 <= len(self.model) <= 100):
+            raise InvalidAircraftName(
+                f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
+            )
+
+    def _validate_business_rows(self):
+        if self.business_rows > self.rows:
+            raise InvalidQuantityBusinessRows(
+                f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
+            )
