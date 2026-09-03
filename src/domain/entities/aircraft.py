@@ -1,12 +1,6 @@
 from dataclasses import dataclass
 
-
-class InvalidAircraftName(ValueError):
-    pass
-
-
-class InvalidQuantityBusinessRows(ValueError):
-    pass
+from domain.validators.aircraft import validate_business_rows, validate_model
 
 
 @dataclass
@@ -21,20 +15,8 @@ class AircraftCreateData:
         return self.rows * self.seats_per_row
 
     def __post_init__(self):
-        self._validate_model()
-        self._validate_business_rows()
-
-    def _validate_model(self):
-        if not (1 <= len(self.model) <= 100):
-            raise InvalidAircraftName(
-                f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
-            )
-
-    def _validate_business_rows(self):
-        if self.business_rows > self.rows:
-            raise InvalidQuantityBusinessRows(
-                f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
-            )
+        validate_model(self.model)
+        validate_business_rows(self.rows, self.business_rows)
 
 
 @dataclass
@@ -45,17 +27,7 @@ class AircraftUpdateData:
     business_rows: int | None
 
     def __post_init__(self):
-        self._validate_model()
-        self._validate_business_rows()
-
-    def _validate_model(self):
-        if not (1 <= len(self.model) <= 100):
-            raise InvalidAircraftName(
-                f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
-            )
-
-    def _validate_business_rows(self):
-        if self.business_rows > self.rows:
-            raise InvalidQuantityBusinessRows(
-                f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
-            )
+        if self.model is not None:
+            validate_model(self.model)
+        if self.rows is not None and self.business_rows is not None:
+            validate_business_rows(self.rows, self.business_rows)
