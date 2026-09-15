@@ -6,9 +6,9 @@ from api.dependencies.aircraft import (
     create_aircraft_use_case,
     delete_aircraft_use_case,
     get_aircraft_use_case,
-    search_aircraft_use_case,
+    search_aircraft_use_case, update_aircraft_use_case,
 )
-from api.schemas.aircraft import CreateAircraftSchema, ResponseAircraftSchema
+from api.schemas.aircraft import CreateAircraftSchema, ResponseAircraftSchema, UpdateAircraftSchema
 from infrastructure.database.postgresql.models import User
 from infrastructure.repositories.postgres.aircraft.exception import (
     AircraftAlreadyExists,
@@ -18,6 +18,7 @@ from infrastructure.types import AircraftIdType
 from usecases.aircraft.create.abstract import AbstractCreateAircraftUseCase
 from usecases.aircraft.get.abstract import AbstractGetAircraftUseCase
 from usecases.aircraft.search.abstract import AbstractSearchAircraftUseCase
+from usecases.aircraft.update.abstract import AbstractAircraftUpdateUseCase
 from usecases.airport.delete.abstract import AbstractDeleteAirportUseCase
 
 
@@ -71,3 +72,16 @@ async def delete_aircraft(
     except AircraftNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     return None
+
+@router.put("/{id}", response_model=ResponseAircraftSchema, status_code=200)
+async def update_aircraft(
+        id: AircraftIdType,
+        payload: UpdateAircraftSchema,
+        _: User = Depends(current_active_superuser),
+        usecase: AbstractAircraftUpdateUseCase = Depends(update_aircraft_use_case),
+):
+    try:
+        aircraft = await usecase.execute(id, payload)
+    except AircraftNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return aircraft
