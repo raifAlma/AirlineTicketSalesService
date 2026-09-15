@@ -15,5 +15,5 @@ class PostgreSQLUpdateAircraftUseCase(AbstractAircraftUpdateUseCase):
             business_rows=payload.business_rows,
         )
         async with self._uow as uow:
-            aircraft = await uow.aircraft.update(id, data)
+            aircraft = await uow.repository.update(id, data)
         return aircraft
