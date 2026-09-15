@@ -61,8 +61,8 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
     async def update(self, id: AircraftIdType, payload: AircraftUpdateData):
         smt = select(Aircraft).where(Aircraft.id == id)
         result = await self.session.execute(smt)
-        existing_aircraft = result.scalar_one_or_none()
-        if not existing_aircraft:
+        aircraft = result.scalar_one_or_none()
+        if not aircraft:
             raise AircraftNotFound(id=id)
 
         update_data = {k: v for k, v in asdict(payload).items() if v is not None}
@@ -75,5 +75,8 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
                 raise AircraftAlreadyExists(model=new_model)
 
             for field, value in update_data.items():
-                if hasattr(existing_aircraft, field):
-                    setattr(existing_aircraft, field, value)
+                if hasattr(aircraft, field):
+                    setattr(aircraft, field, value)
+
+            await self.session.flush()
+            return aircraft
