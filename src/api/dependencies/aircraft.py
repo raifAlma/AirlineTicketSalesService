@@ -8,6 +8,7 @@ from usecases.aircraft.create.implementation import PostgreSQLCreateAircraftUseC
 from usecases.aircraft.delete.implementation import PostgreSQLDeleteAircraftUseCase
 from usecases.aircraft.get.implementation import PostgreSQLGetAircraftUseCase
 from usecases.aircraft.search.implementation import PostgreSQLSearchAircraftUseCase
+from usecases.aircraft.update.implementation import PostgreSQLUpdateAircraftUseCase
 
 
 def get_aircraft_unit_of_work(
@@ -42,3 +43,9 @@ def delete_aircraft_use_case(
 ):
     uow = get_aircraft_unit_of_work(session)
     return PostgreSQLDeleteAircraftUseCase(uow=uow)
+
+def update_aircraft_use_case(
+    session: AsyncSession = Depends(get_async_session),
+):
+    uow = get_aircraft_unit_of_work(session)
+    return PostgreSQLUpdateAircraftUseCase(uow=uow)
