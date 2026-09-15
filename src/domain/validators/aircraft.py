@@ -6,17 +6,17 @@ class InvalidQuantityBusinessRows(ValueError):
     pass
 
 
-def validate_model(self):
-    if not (1 <= len(self.model) <= 100):
+def validate_model(model: str):
+    if not (1 <= len(model) <= 100):
         raise InvalidAircraftName(
-            f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(self.model)}"
+            f"Invalid Aircraft model name. Must be between 1 and 100. Got {len(model)}"
         )
 
 
-def validate_business_rows(self):
-    if self.rows is None or self.business_rows is None:
+def validate_business_rows(rows: int, business_rows: int):
+    if rows is None or business_rows is None:
         return
-    if self.business_rows > self.rows:
+    if business_rows > rows:
         raise InvalidQuantityBusinessRows(
-            f"business_rows ({self.business_rows}) cannot exceed rows ({self.rows})"
+            f"business_rows ({business_rows}) cannot exceed rows ({rows})"
         )
