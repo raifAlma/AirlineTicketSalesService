@@ -23,3 +23,7 @@ class AbstractAircraftRepository(ABC):
     @abstractmethod
     async def delete(self, id: AircraftIdType) -> None:
         raise NotImplementedError
+
+    @abstractmethod
+    async def update(self, id: AircraftIdType, payload: AircraftCreateData) -> Aircraft:
+        raise NotImplementedError
