@@ -107,3 +107,25 @@ async def main():
     print("✅ Тест прошёл: usecase вызвал repository.update() с правильными аргументами!")
 
 asyncio.run(main())
+
+async def test_<action>_<entity>_usecase_calls_repository_correctly():
+    # 1. Подготовить mock-репозиторий с ожидаемым возвращаемым значением
+    mock_repository = AsyncMock()
+    mock_repository.<method>.return_value = <что угодно, не важно для этого теста>
+
+    # 2. Подготовить mock UoW, который правильно ведёт себя как async context manager
+    mock_uow = AsyncMock()
+    mock_uow.__aenter__.return_value = mock_uow
+    mock_uow.repository = mock_repository
+
+    # 3. Создать РЕАЛЬНЫЙ usecase, подсунув ему mock uow
+    usecase = Real<Action><Entity>UseCase(uow=mock_uow)
+
+    # 4. Вызвать execute с реальными входными данными
+    await usecase.execute(<id если нужен>, <payload>)
+
+    # 5. Построить ожидаемый доменный объект — то, что usecase ДОЛЖЕН был создать
+    expected = <Entity>UpdateData(...)
+
+    # 6. Проверить, что репозиторий был вызван именно с этим объектом
+    mock_repository.<method>.assert_called_once_with(<id если нужен>, expected)
