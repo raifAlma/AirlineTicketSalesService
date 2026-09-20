@@ -53,6 +53,8 @@ async def test_search_airport_by_code(created_airport):
         payload = {"q": code}
         resp = await ac.get("/api/v1/airport/search", params=payload)
         assert resp.status_code == 200
+        result = resp.json()
+        assert len(result) >= 1
 
 
 async def test_user_can_delete_airport(create_user, created_airport):
@@ -64,7 +66,6 @@ async def test_user_can_delete_airport(create_user, created_airport):
         resp = await ac.delete(
             f"/api/v1/airport/{id}",
             headers={"Authorization": f"Bearer {token}"},
-            params={"id": id},
         )
         assert resp.status_code == 403
 
@@ -96,8 +97,6 @@ async def test_create_airport_with_duplicate_code(
             json={"code": code, "name": "Heathrow", "city": "London", "country": "USA"},
             headers={"Authorization": f"Bearer {token}"},
         )
-        assert resp.status_code == 400, "Должен быть конфликт при дубликате кода"
-
+        assert resp.status_code == 400
         body = resp.json()
-        # Проверяем, что в ответе есть понятное сообщение об ошибке
-        assert "already" in str(body).lower() or "exists" in str(body).lower()
+        assert "already exists" in body["detail"].lower()
