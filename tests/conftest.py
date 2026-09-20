@@ -80,6 +80,10 @@ async def create_superuser_and_token():
 def unique_airport_code():
     return fake.unique.lexify("???").upper()
 
+@pytest.fixture
+def unique_aircraft_model():
+    return fake.unique.lexify('??????')
+
 
 @pytest.fixture
 async def created_airport(create_superuser_and_token, unique_airport_code):
@@ -95,5 +99,23 @@ async def created_airport(create_superuser_and_token, unique_airport_code):
         )
         assert resp.status_code == 201
         data = resp.json()
-        print(data)
         return {"id": data["id"], "code": code}
+
+@pytest.fixture
+async def created_aircraft(create_superuser_and_token, unique_aircraft_model):
+    token = create_superuser_and_token["token"]
+    model = unique_aircraft_model
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        resp = await ac.post(
+            "/api/v1/aircraft",
+            json={
+                "model": model, 'rows': 30,
+                  'seats_per_row': 4, 'business_rows': 5
+            },
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        return {"id": data["id"], "model": data["model"]}
