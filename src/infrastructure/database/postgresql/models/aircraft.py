@@ -1,4 +1,3 @@
-# aircraft.py
 import uuid
 from typing import TYPE_CHECKING
 
@@ -17,6 +16,7 @@ class Aircraft(Base):
     __tablename__ = "aircraft"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     model: Mapped[str] = mapped_column(String(100), nullable=False)
+    tail_number: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
     rows: Mapped[int] = mapped_column(Integer, nullable=False)
     seats_per_row: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
     business_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
