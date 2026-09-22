@@ -8,11 +8,11 @@ class AircraftError(Exception):
 
 
 class AircraftAlreadyExists(AircraftError):
-    def __init__(self, model: str | None = None):
-        self.name = model
+    def __init__(self, tail_number: str | None = None):
+        self.name = tail_number
         message = (
-            f"Aircraft with model {model!r} already exists"
-            if model
+            f"Aircraft with tail_number {tail_number!r} already exists"
+            if tail_number
             else "Aircraft already exists, check the entered data"
         )
         super().__init__(message)
