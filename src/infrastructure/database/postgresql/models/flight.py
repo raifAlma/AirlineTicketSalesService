@@ -4,7 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List
 
-from sqlalchemy import DECIMAL, DateTime, Enum, ForeignKey
+from sqlalchemy import DECIMAL, DateTime, Enum, ForeignKey, Boolean, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,12 +33,13 @@ class Flight(Base):
         UUID(as_uuid=True), ForeignKey("airports.id"), nullable=False
     )
 
+    departure_time: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     arrival_time: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     price: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
     status: Mapped[StatusType] = mapped_column(
         Enum(StatusType), nullable=False, default=StatusType.SCHEDULED
     )
-
+    flight_number: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
     aircraft: Mapped["Aircraft"] = relationship(back_populates="flights")
     departure_airport: Mapped["Airport"] = relationship(
         "Airport",
