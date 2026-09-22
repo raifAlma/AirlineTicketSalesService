@@ -1,3 +1,4 @@
+from .airline import Airline
 from .airport import Airport
 from .aircraft import Aircraft
 from .flight import Flight
