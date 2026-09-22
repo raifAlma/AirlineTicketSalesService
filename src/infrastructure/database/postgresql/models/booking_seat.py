@@ -1,7 +1,7 @@
 # src/infrastructure/database/postgresql/models/booking_seat.py
 import uuid
 
-from sqlalchemy import DECIMAL, ForeignKey, Integer
+from sqlalchemy import DECIMAL, ForeignKey, Integer, UniqueConstraint
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,3 +20,7 @@ class BookingSeat(Base):
 
     booking: Mapped["Booking"] = relationship(back_populates="booking_seats")
     seat: Mapped["Seat"] = relationship(back_populates="booking_seats")
+
+    __table_args__ = (
+        UniqueConstraint("booking_id", "seat_id", name="uq_booking_seat"),
+    )

@@ -2,7 +2,7 @@ import enum
 import uuid
 from typing import List
 
-from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -27,3 +27,7 @@ class Seat(Base):
 
     flight: Mapped["Flight"] = relationship(back_populates="seats")
     booking_seats: Mapped[List["BookingSeat"]] = relationship(back_populates="seat")
+
+    __table_args__ = (
+        UniqueConstraint("flight_id", "seat_number", name="uq_seat_flight_number"),
+    )
