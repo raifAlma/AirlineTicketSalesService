@@ -1,7 +1,8 @@
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator, field_validator
+
 
 
 def validate_business_rows(model) -> None:
@@ -17,6 +18,7 @@ class CreateAircraftSchema(BaseModel):
     rows: int = Field(gt=0, le=100)
     seats_per_row: int = Field(gt=0, le=10)
     business_rows: int = Field(ge=0)
+    tail_number: str = Field(min_length=1, max_length=20)
 
     @model_validator(mode="after")
     def validate(self) -> 'CreateAircraftSchema':

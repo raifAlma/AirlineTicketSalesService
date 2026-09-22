@@ -19,11 +19,11 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
         self.session = session
 
     async def create(self, payload: AircraftCreateData):
-        smt = select(Aircraft).where(Aircraft.model == payload.model)
+        smt = select(Aircraft).where(Aircraft.tail_number == payload.tail_number)
         result = await self.session.execute(smt)
         existing_aircraft = result.scalar_one_or_none()
         if existing_aircraft:
-            raise AircraftAlreadyExists(model=payload.model)
+            raise AircraftAlreadyExists(tail_number=payload.tail_number)
         aircraft = Aircraft(
             model=payload.model,
             rows=payload.rows,
@@ -69,10 +69,10 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
         if "model" in update_data:
             new_model = update_data["model"]
             exists = await self.session.scalar(
-                select(Aircraft).where(Aircraft.model == new_model, Aircraft.id != id)
+                select(Aircraft).where(Aircraft.tail_number == tail_number, Aircraft.id != id)
             )
             if exists:
-                raise AircraftAlreadyExists(model=new_model)
+                raise AircraftAlreadyExists(tail_number=new_model)
 
             for field, value in update_data.items():
                 if hasattr(aircraft, field):

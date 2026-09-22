@@ -9,6 +9,7 @@ from api.dependencies.aircraft import (
     search_aircraft_use_case, update_aircraft_use_case,
 )
 from api.schemas.aircraft import CreateAircraftSchema, ResponseAircraftSchema, UpdateAircraftSchema
+from domain.validators.aircraft.aircraft_exceptions import InvalidAircraftField
 from infrastructure.database.postgresql.models import User
 from infrastructure.repositories.postgres.aircraft.exception import (
     AircraftAlreadyExists,
@@ -36,6 +37,8 @@ async def create_aircraft(
 ):
     try:
         aircraft = await usecase.execute(payload)
+    except InvalidAircraftField as e:
+        raise HTTPException(status_code=422, detail=str(e))
     except AircraftAlreadyExists as e:
         raise HTTPException(status_code=400, detail=str(e))
     return aircraft
