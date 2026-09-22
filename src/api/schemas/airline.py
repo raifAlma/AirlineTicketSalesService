@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field, field_validator, ValidationError
+from pydantic import BaseModel, Field, field_validator, ValidationError, ConfigDict
+
+from infrastructure.types import AirlineIdType
 
 
 def validate_iata_code(v: str | None) -> str | None:
@@ -18,3 +20,7 @@ class CreateAirlineSchema(BaseModel):
     @classmethod
     def create_validate_iata_code(cls, v):
         return validate_iata_code(v)
+
+class ResponseCreateAirlineSchema(CreateAirlineSchema):
+    id: AirlineIdType
+    model_config = ConfigDict(from_attributes=True)
