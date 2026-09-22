@@ -1,10 +1,16 @@
+# aircraft.py
 import uuid
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..base import Base
-from .flight import Flight
+
+if TYPE_CHECKING:
+    from .airline import Airline
+    from .flight import Flight
 
 
 class Aircraft(Base):
@@ -14,7 +20,13 @@ class Aircraft(Base):
     rows: Mapped[int] = mapped_column(Integer, nullable=False)
     seats_per_row: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
     business_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    flights: Mapped[list[Flight]] = relationship(back_populates="aircraft")
+
+    airline_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("airline.id"), nullable=False
+    )
+
+    flights: Mapped[list["Flight"]] = relationship(back_populates="aircraft")
+    airline: Mapped["Airline"] = relationship(back_populates="aircrafts")
 
     @property
     def capacity(self) -> int:
