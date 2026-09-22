@@ -1,0 +1,13 @@
+from dataclasses import dataclass
+from domain.validators.airline import validate_airline_name, validate_airline_county, validate_iata_code
+
+@dataclass
+class AirlineCreateData:
+    name: str
+    iata_code: str
+    country: str
+
+    def __post_init__(self):
+        validate_airline_name(self.name)
+        validate_airline_county(self.country)
+        validate_iata_code(self.iata_code)
