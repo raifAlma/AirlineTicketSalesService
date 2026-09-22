@@ -3,6 +3,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
+from infrastructure.types import AircraftIdType
+
 
 def validate_code(v: str | None) -> str | None:
     if v is None:
@@ -25,7 +27,7 @@ class CreateAirportSchema(BaseModel):
 
 
 class ResponseAirportSchema(CreateAirportSchema):
-    id: UUID
+    id: AircraftIdType
     model_config = ConfigDict(from_attributes=True)
 
 
