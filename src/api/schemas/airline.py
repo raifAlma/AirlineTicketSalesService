@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator, ValidationError, ConfigDict
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 from infrastructure.types import AirlineIdType
 
