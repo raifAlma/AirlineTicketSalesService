@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from domain.validators.airline import validate_airline_name, validate_airline_county, validate_iata_code
+from domain.validators.airline.airline import validate_airline_name, validate_airline_county, validate_iata_code
 
 @dataclass
 class AirlineCreateData:
