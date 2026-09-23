@@ -6,6 +6,7 @@ from .user import router as user_router
 from .messages import router as messages_router
 from .airport import router as airport_router
 from .aircraft import router as aircraft_router
+from .airline import router as airline_router
 
 http_bearer = HTTPBearer(auto_error=False)
 
@@ -18,3 +19,4 @@ router.include_router(user_router)
 router.include_router(messages_router)
 router.include_router(airport_router)
 router.include_router(aircraft_router)
+router.include_router(airline_router)
