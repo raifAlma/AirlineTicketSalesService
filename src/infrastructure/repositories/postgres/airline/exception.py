@@ -2,7 +2,7 @@
 class AirlineError(Exception):
     pass
 
-class AirlineAlreadyExistsError(AirlineError):
+class AirlineAlreadyExists(AirlineError):
     def __init__(self, iata_code: str ):
         self.iata_code = iata_code
         message = (

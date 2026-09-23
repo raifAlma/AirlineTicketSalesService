@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from domain.abstract_repositories.airline import AbstractAirlineRepository
 from domain.entities.airline import AirlineCreateData
 from infrastructure.database.postgresql.models import Airline
-from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExistsError
+from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExists
 
 
 class PostgreSQLAirlineRepository(AbstractAirlineRepository):
@@ -18,7 +18,7 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
         result = await self.session.execute(smt)
         exists_iata_code = result.scalar_one_or_none()
         if exists_iata_code:
-            raise AirlineAlreadyExistsError(iata_code=payload.iata_code)
+            raise AirlineAlreadyExists(iata_code=payload.iata_code)
         airline = Airline(
             name=payload.name,
             iata_code=payload.iata_code,
