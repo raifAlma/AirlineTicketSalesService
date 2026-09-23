@@ -69,7 +69,9 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
         if "model" in update_data:
             new_model = update_data["model"]
             exists = await self.session.scalar(
-                select(Aircraft).where(Aircraft.tail_number == tail_number, Aircraft.id != id)
+                select(Aircraft).where(
+                    Aircraft.tail_number == tail_number, Aircraft.id != id
+                )
             )
             if exists:
                 raise AircraftAlreadyExists(tail_number=new_model)

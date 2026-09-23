@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from domain.validators.aircraft.aircraft import (
+    validate_business_rows,
     validate_model,
-    validate_tail_number,
     validate_rows,
     validate_seats_per_row,
-    validate_business_rows,
+    validate_tail_number,
 )
 
 

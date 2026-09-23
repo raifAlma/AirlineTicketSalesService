@@ -1,9 +1,9 @@
 from domain.validators.aircraft.aircraft_exceptions import (
     InvalidModelName,
-    InvalidTailNumber,
+    InvalidQuantityBusinessRows,
     InvalidQuantityRows,
     InvalidSeatsPerRow,
-    InvalidQuantityBusinessRows,
+    InvalidTailNumber,
 )
 
 

@@ -7,5 +7,5 @@ from infrastructure.database.postgresql.models import Airline
 class AbstractAirlineRepository(ABC):
 
     @abstractmethod
-    async def create (self, payload: AirlineCreateData) -> Airline:
+    async def create(self, payload: AirlineCreateData) -> Airline:
         raise NotImplementedError

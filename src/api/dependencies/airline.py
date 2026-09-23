@@ -12,8 +12,9 @@ def get_airline_unit_of_work(
 ) -> PostgreSQLAirlineUnitOfWork:
     return build_airline_unit_of_work(session)
 
+
 def create_airline_use_case(
-        session: AsyncSession,
+    session: AsyncSession,
 ):
     uow = get_airline_unit_of_work(session)
     return PostgreSQLCreateAirlineUseCase(uow=uow)

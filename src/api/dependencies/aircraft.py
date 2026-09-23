@@ -44,6 +44,7 @@ def delete_aircraft_use_case(
     uow = get_aircraft_unit_of_work(session)
     return PostgreSQLDeleteAircraftUseCase(uow=uow)
 
+
 def update_aircraft_use_case(
     session: AsyncSession = Depends(get_async_session),
 ):

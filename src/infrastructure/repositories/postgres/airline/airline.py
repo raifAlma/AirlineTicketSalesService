@@ -1,4 +1,4 @@
-from sqlalchemy import select, or_
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.airline import AbstractAirlineRepository
@@ -12,9 +12,7 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
         self.session = session
 
     async def create(self, payload: AirlineCreateData):
-        smt = select(Airline).where(
-            Airline.iata_code == payload.iata_code
-        )
+        smt = select(Airline).where(Airline.iata_code == payload.iata_code)
         result = await self.session.execute(smt)
         exists_iata_code = result.scalar_one_or_none()
         if exists_iata_code:

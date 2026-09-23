@@ -4,7 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List
 
-from sqlalchemy import DECIMAL, DateTime, Enum, ForeignKey, Boolean, String
+from sqlalchemy import DECIMAL, Boolean, DateTime, Enum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
