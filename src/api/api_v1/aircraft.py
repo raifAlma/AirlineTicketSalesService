@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from starlette.responses import JSONResponse
 
 from api.api_v1.fastapi_users import current_active_superuser
 from api.dependencies.aircraft import (
