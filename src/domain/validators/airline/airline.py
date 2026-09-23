@@ -1,11 +1,4 @@
-class InvalidAirlineName(Exception):
-    pass
-
-class InvalidAirlineCounty(Exception):
-    pass
-
-class InvalidIataCode(Exception):
-    pass
+from .airline_exception import InvalidAirlineName, InvalidAirlineCountry, InvalidIataCode
 
 def validate_airline_name(name: str):
     if not (1 <= len(name) <= 100):
@@ -15,7 +8,7 @@ def validate_airline_name(name: str):
 
 def validate_airline_county(county: str):
     if not (1 <= len(county) <= 100):
-        raise InvalidAirlineCounty(
+        raise InvalidAirlineCountry(
             f'County must be between 1 and 100 characters, got {len(county)}'
         )
 
