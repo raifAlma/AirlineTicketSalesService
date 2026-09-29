@@ -16,11 +16,9 @@ from api.schemas.aircraft import (
 from domain.validators.aircraft.aircraft_exceptions import InvalidAircraftField
 from infrastructure.database.postgresql.models import User
 from infrastructure.repositories.postgres.aircraft.exception import (
-    AircraftAlreadyExists,
     AircraftNotFound,
 )
 from infrastructure.types import AircraftIdType
-from usecases.aircraft.create.abstract import AbstractCreateAircraftUseCase
 from usecases.aircraft.get.abstract import AbstractGetAircraftUseCase
 from usecases.aircraft.search.abstract import AbstractSearchAircraftUseCase
 from usecases.aircraft.update.abstract import AbstractAircraftUpdateUseCase
@@ -33,20 +31,8 @@ router = APIRouter(
 )
 
 
-@router.post("", response_model=ResponseAircraftSchema, status_code=201)
-async def create_aircraft(
-    payload: CreateAircraftSchema,
-    usecase: AbstractCreateAircraftUseCase = Depends(create_aircraft_use_case),
-    _: User = Depends(current_active_superuser),
-):
-    try:
-        aircraft = await usecase.execute(payload)
-    except InvalidAircraftField as e:
-        raise HTTPException(status_code=422, detail=str(e))
-    except AircraftAlreadyExists as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    return aircraft
 
+#TODO доделать создание самоелта с авиакоманиней usecase, repo
 
 @router.get("/search", response_model=list[ResponseAircraftSchema], status_code=200)
 async def search_aircraft(
