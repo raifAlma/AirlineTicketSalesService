@@ -15,7 +15,7 @@ class Airline(Base):
     __tablename__ = "airline"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
     iata_code: Mapped[str] = mapped_column(String(4), nullable=False, unique=True)
     country: Mapped[str] = mapped_column(String(100), nullable=False)
 
