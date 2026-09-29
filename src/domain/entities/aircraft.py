@@ -7,6 +7,7 @@ from domain.validators.aircraft.aircraft import (
     validate_seats_per_row,
     validate_tail_number,
 )
+from infrastructure.types import AirlineIdType
 
 
 @dataclass
@@ -16,6 +17,7 @@ class AircraftCreateData:
     seats_per_row: int
     business_rows: int
     tail_number: str
+    airline_id: AirlineIdType
 
     @property
     def capacity(self) -> int:

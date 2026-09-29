@@ -10,6 +10,7 @@ from domain.validators.airline.airline_exception import InvalidAirlineField
 from infrastructure.database.postgresql.models import User
 from infrastructure.repositories.postgres.aircraft.exception import AircraftAlreadyExists
 from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExists
+from infrastructure.types import AirlineIdType
 from usecases.aircraft.create.abstract import AbstractCreateAircraftUseCase
 from usecases.airline.create.abstract import AbstractCreateAirlineUseCase
 
@@ -34,14 +35,15 @@ async def create_airline(
         raise HTTPException(status_code=400, detail=str(e))
     return airline
 
-@router.post("/{airline_id}/aircraft/", response_model=ResponseAircraftSchema, status_code=201)
+@router.post("/{airline_id}/aircraft", response_model=ResponseAircraftSchema, status_code=201)
 async def create_aircraft(
+    airline_id: AirlineIdType,
     payload: CreateAircraftSchema,
     usecase: AbstractCreateAircraftUseCase = Depends(create_aircraft_use_case),
     _: User = Depends(current_active_superuser),
 ):
     try:
-        aircraft = await usecase.execute(payload)
+        aircraft = await usecase.execute(airline_id,payload)
     except InvalidAircraftField as e:
         raise HTTPException(status_code=422, detail=str(e))
     except AircraftAlreadyExists as e:

@@ -3,13 +3,13 @@ from typing import List
 
 from domain.entities.aircraft import AircraftCreateData
 from infrastructure.database.postgresql.models import Aircraft
-from infrastructure.types import AircraftIdType
+from infrastructure.types import AircraftIdType, AirlineIdType
 
 
 class AbstractAircraftRepository(ABC):
 
     @abstractmethod
-    async def create(self, payload: AircraftCreateData) -> Aircraft:
+    async def create(self, airline_id: AirlineIdType,  payload: AircraftCreateData) -> Aircraft:
         raise NotImplementedError
 
     @abstractmethod

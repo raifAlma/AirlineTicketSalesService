@@ -6,9 +6,10 @@ from pydantic import (
     ConfigDict,
     Field,
     computed_field,
-    field_validator,
     model_validator,
 )
+
+from infrastructure.types import AirlineIdType
 
 
 def validate_business_rows(model) -> None:
@@ -51,6 +52,9 @@ class ResponseAircraftSchema(BaseModel):
     rows: int
     seats_per_row: int
     business_rows: int
+    airline_id: AirlineIdType
+    tail_number: str
+
 
     @computed_field
     @property

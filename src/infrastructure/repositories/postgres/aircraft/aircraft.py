@@ -6,29 +6,39 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.aircraft import AbstractAircraftRepository
 from domain.entities.aircraft import AircraftCreateData, AircraftUpdateData
-from infrastructure.database.postgresql.models import Aircraft
+from infrastructure.database.postgresql.models import Aircraft, Airline
 from infrastructure.repositories.postgres.aircraft.exception import (
     AircraftAlreadyExists,
     AircraftNotFound,
 )
-from infrastructure.types import AircraftIdType
+from infrastructure.repositories.postgres.airline.exception import AirlineNotFound
+from infrastructure.types import AircraftIdType, AirlineIdType
 
 
 class PostgreSQLAircraftRepository(AbstractAircraftRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, payload: AircraftCreateData):
+    async def create(self, airline_id: AirlineIdType, payload: AircraftCreateData):
+        stmt = select(Airline).where(Airline.id == airline_id)
+        result = await self.session.execute(stmt)
+        airline = result.scalar_one_or_none()
+        if not airline:
+            raise AirlineNotFound(id=airline_id)
+
         smt = select(Aircraft).where(Aircraft.tail_number == payload.tail_number)
         result = await self.session.execute(smt)
         existing_aircraft = result.scalar_one_or_none()
         if existing_aircraft:
             raise AircraftAlreadyExists(tail_number=payload.tail_number)
+
         aircraft = Aircraft(
             model=payload.model,
             rows=payload.rows,
             seats_per_row=payload.seats_per_row,
             business_rows=payload.business_rows,
+            tail_number=payload.tail_number,
+            airline_id=airline_id,
         )
         self.session.add(aircraft)
         await self.session.flush()
