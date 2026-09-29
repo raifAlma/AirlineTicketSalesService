@@ -55,7 +55,6 @@ class ResponseAircraftSchema(BaseModel):
     airline_id: AirlineIdType
     tail_number: str
 
-
     @computed_field
     @property
     def capacity(self) -> int:

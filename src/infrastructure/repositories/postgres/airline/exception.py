@@ -11,6 +11,7 @@ class AirlineAlreadyExists(AirlineError):
         message = f"Airline with code {self.iata_code} already exists."
         super().__init__(message)
 
+
 class AirlineNotFound(AirlineError):
     def __init__(self, id: AirlineIdType):
         self.id = id

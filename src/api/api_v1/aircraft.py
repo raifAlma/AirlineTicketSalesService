@@ -31,8 +31,6 @@ router = APIRouter(
 )
 
 
-
-
 @router.get("/search", response_model=list[ResponseAircraftSchema], status_code=200)
 async def search_aircraft(
     q: str = Query(..., min_length=1, max_length=100),
