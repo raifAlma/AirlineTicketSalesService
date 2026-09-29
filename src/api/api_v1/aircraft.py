@@ -32,7 +32,6 @@ router = APIRouter(
 
 
 
-#TODO доделать создание самоелта с авиакоманиней usecase, repo
 
 @router.get("/search", response_model=list[ResponseAircraftSchema], status_code=200)
 async def search_aircraft(
