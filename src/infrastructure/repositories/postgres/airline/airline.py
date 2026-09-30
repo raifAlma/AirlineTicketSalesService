@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from domain.abstract_repositories.airline import AbstractAirlineRepository
 from domain.entities.airline import AirlineCreateData
 from infrastructure.database.postgresql.models import Airline
-from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExists
+from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExists, AirlineNotFound
+from infrastructure.types import AirlineIdType
 
 
 class PostgreSQLAirlineRepository(AbstractAirlineRepository):
@@ -25,3 +26,13 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
         self.session.add(airline)
         await self.session.flush()
         return airline
+
+    async def get_by_id(self, id: AirlineIdType):
+        smt = select(Airline).where(Airline.id == id)
+        result = await self.session.execute(smt)
+        airline = result.scalar_one_or_none()
+        if airline is None:
+            raise AirlineNotFound(id=id)
+        return airline
+
+
