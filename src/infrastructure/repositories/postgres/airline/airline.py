@@ -1,10 +1,15 @@
+from typing import List
+
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.airline import AbstractAirlineRepository
 from domain.entities.airline import AirlineCreateData
 from infrastructure.database.postgresql.models import Airline
-from infrastructure.repositories.postgres.airline.exception import AirlineAlreadyExists, AirlineNotFound
+from infrastructure.repositories.postgres.airline.exception import (
+    AirlineAlreadyExists,
+    AirlineNotFound,
+)
 from infrastructure.types import AirlineIdType
 
 
@@ -35,4 +40,16 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
             raise AirlineNotFound(id=id)
         return airline
 
+    async def search(self, query: str) -> List[Airline]:
+        pattern = f"%{query}%"
+        smt = select(Airline).where(or_(
+            Airline.iata_code == query.upper(),
+            Airline.name.ilike(pattern),
+            Airline.country.ilike(pattern),
+        ))
+        result = await self.session.execute(smt)
+        airline = result.scalars().all()
+        return airline
 
+    async def delete(self, id: AirlineIdType):
+        ...
