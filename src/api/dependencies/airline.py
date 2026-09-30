@@ -21,7 +21,7 @@ def create_airline_use_case(
     return PostgreSQLCreateAirlineUseCase(uow=uow)
 
 def get_by_id_airline_use_case(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     uow = get_airline_unit_of_work(session)
     return PostgreSQLGetByIdAirlineUseCase(uow=uow)
