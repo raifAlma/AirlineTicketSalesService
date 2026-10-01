@@ -52,4 +52,10 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
         return airline
 
     async def delete(self, id: AirlineIdType):
-        ...
+        smt = select(Airline).where(Airline.id == id)
+        result = await self.session.execute(smt)
+        airline = result.scalar_one_or_none()
+        if airline is None:
+            raise AirlineNotFound(id=id)
+        await self.session.delete(airline)
+        await self.session.flush()
