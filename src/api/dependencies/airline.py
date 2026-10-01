@@ -5,6 +5,7 @@ from infrastructure.database.postgresql.session import get_async_session
 from infrastructure.di.injection import build_airline_unit_of_work
 from infrastructure.repositories.postgres.airline.uow import PostgreSQLAirlineUnitOfWork
 from usecases.airline.create.implementation import PostgreSQLCreateAirlineUseCase
+from usecases.airline.delete.implementation import PostgreSQLDeleteAirlineCase
 from usecases.airline.get_by_id.implementation import PostgreSQLGetByIdAirlineUseCase
 from usecases.airline.search.implementation import PostgreSQLSearchAirlineUseCase
 
@@ -32,3 +33,9 @@ def search_airline_use_case(
 ):
     uow = get_airline_unit_of_work(session)
     return PostgreSQLSearchAirlineUseCase(uow=uow)
+
+def delete_airline_use_case(
+        session: AsyncSession = Depends(get_async_session),
+):
+    uow = get_airline_unit_of_work(session)
+    return PostgreSQLDeleteAirlineCase(uow=uow)
