@@ -2,7 +2,7 @@ from infrastructure.types import AirlineIdType
 from usecases.airline.delete.abstract import AbstractDeleteAirlineUseCase
 
 
-class PostgreSQLDeleteAirlineseCase(AbstractDeleteAirlineUseCase):
+class PostgreSQLDeleteAirlineCase(AbstractDeleteAirlineUseCase):
     def __init__(self, uow):
         self._uow = uow
 
