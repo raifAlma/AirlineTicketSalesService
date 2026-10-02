@@ -1,10 +1,11 @@
+from dataclasses import asdict
 from typing import List
 
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.abstract_repositories.airline import AbstractAirlineRepository
-from domain.entities.airline import AirlineCreateData
+from domain.entities.airline import AirlineCreateData, AirlineUpdateData
 from infrastructure.database.postgresql.models import Airline
 from infrastructure.repositories.postgres.airline.exception import (
     AirlineAlreadyExists,
@@ -63,4 +64,24 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
         await self.session.flush()
 
 
-# todo: какскадное удалени
+    async def update(self, id: AirlineIdType, payload: AirlineUpdateData):
+        smt = select(Airline).where(Airline.id == id)
+        result = await self.session.execute(smt)
+        airline = result.scalar_one_or_none()
+        if airline is None:
+            raise AirlineNotFound(id=id)
+
+        update_data = {k:v for k,v in asdict(payload).items() if v is not None}
+        if 'iata_code' in update_data:
+            new_iata_code = update_data['iata_code']
+            existing_iata_code = await self.session.scalar(
+                select(Airline).where(Airline.iata_code == new_iata_code, Airline.id != id)
+            )
+            if existing_iata_code:
+                raise AirlineAlreadyExists(iata_code=new_iata_code)
+            for field, value in update_data.items():
+                if hasattr(airline, field):
+                    setattr(airline, field, value)
+
+            await self.session.flush()
+            return airline
