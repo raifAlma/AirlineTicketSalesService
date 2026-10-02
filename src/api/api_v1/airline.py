@@ -4,7 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api.api_v1.fastapi_users import current_active_superuser
 from api.dependencies.aircraft import create_aircraft_use_case
-from api.dependencies.airline import create_airline_use_case, get_by_id_airline_use_case, search_airline_use_case
+from api.dependencies.airline import (
+    create_airline_use_case,
+    delete_airline_use_case,
+    get_by_id_airline_use_case,
+    search_airline_use_case,
+)
 from api.schemas.aircraft import CreateAircraftSchema, ResponseAircraftSchema
 from api.schemas.airline import CreateAirlineSchema, ResponseCreateAirlineSchema
 from domain.validators.aircraft.aircraft_exceptions import InvalidAircraftField
@@ -20,8 +25,10 @@ from infrastructure.repositories.postgres.airline.exception import (
 from infrastructure.types import AircraftIdType, AirlineIdType
 from usecases.aircraft.create.abstract import AbstractCreateAircraftUseCase
 from usecases.airline.create.abstract import AbstractCreateAirlineUseCase
+from usecases.airline.delete.abstract import AbstractDeleteAirlineUseCase
 from usecases.airline.get_by_id.abstract import AbstractGetByIdAirlineUseCase
 from usecases.airline.search.abstract import AbstractSearchAirlineUseCase
+
 
 router = APIRouter(
     prefix="/airline",
@@ -43,12 +50,15 @@ async def create_airline(
         raise HTTPException(status_code=400, detail=str(e))
     return airline
 
-@router.get('/search', response_model=List[ResponseAircraftSchema], status_code=200)
+
+@router.get("/search", response_model=List[ResponseAircraftSchema], status_code=200)
 async def search_airline(
-        q: str = Query(..., min_length=1, max_length=100),
-        usecase: AbstractSearchAirlineUseCase = Depends(search_airline_use_case)
+    q: str = Query(..., min_length=1, max_length=100),
+    usecase: AbstractSearchAirlineUseCase = Depends(search_airline_use_case),
 ):
     return await usecase.execute(q)
+
+
 @router.post(
     "/{airline_id}/aircraft", response_model=ResponseAircraftSchema, status_code=201
 )
@@ -78,3 +88,16 @@ async def get_by_id(
     except AirlineNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     return airline
+
+
+@router.delete("/{id}", status_code=204)
+async def delete(
+    id: AirlineIdType,
+    usecase: AbstractDeleteAirlineUseCase = Depends(delete_airline_use_case),
+    _: User = Depends(current_active_superuser),
+):
+    try:
+        await usecase.execute(id)
+    except AirlineNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return None
