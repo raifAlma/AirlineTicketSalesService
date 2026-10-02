@@ -76,15 +76,15 @@ class PostgreSQLAircraftRepository(AbstractAircraftRepository):
             raise AircraftNotFound(id=id)
 
         update_data = {k: v for k, v in asdict(payload).items() if v is not None}
-        if "model" in update_data:
-            new_model = update_data["model"]
+        if "tail_numder" in update_data:
+            new_tail_number = update_data["tail_numder"]
             exists = await self.session.scalar(
                 select(Aircraft).where(
-                    Aircraft.tail_number == tail_number, Aircraft.id != id
+                    Aircraft.tail_number == new_tail_number, Aircraft.id != id
                 )
             )
             if exists:
-                raise AircraftAlreadyExists(tail_number=new_model)
+                raise AircraftAlreadyExists(tail_number=new_tail_number)
 
             for field, value in update_data.items():
                 if hasattr(aircraft, field):
