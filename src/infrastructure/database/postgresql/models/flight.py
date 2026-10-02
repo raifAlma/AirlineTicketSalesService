@@ -24,7 +24,9 @@ class Flight(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     aircraft_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("aircraft.id"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("aircraft.id", ondelete="CASCADE"),
+        nullable=False,
     )
     departure_airport_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("airports.id"), nullable=False
@@ -53,6 +55,8 @@ class Flight(Base):
     )
 
     seats: Mapped[List["Seat"]] = relationship(
-        back_populates="flight", cascade="all, delete-orphan"
+        back_populates="flight", passive_deletes=True
     )
-    bookings: Mapped[List["Booking"]] = relationship(back_populates="flight")
+    bookings: Mapped[List["Booking"]] = relationship(
+        back_populates="flight", passive_deletes=True
+    )

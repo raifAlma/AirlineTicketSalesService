@@ -23,7 +23,9 @@ class Payment(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     booking_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("bookings.id", ondelete="CASCADE"),
+        nullable=False,
     )
     amount: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
     status: Mapped[PaymentsStatusType] = mapped_column(

@@ -19,4 +19,7 @@ class Airline(Base):
     iata_code: Mapped[str] = mapped_column(String(4), nullable=False, unique=True)
     country: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    aircrafts: Mapped[list["Aircraft"]] = relationship(back_populates="airline")
+    aircrafts: Mapped[list["Aircraft"]] = relationship(
+        back_populates="airline",
+        passive_deletes=True,
+    )

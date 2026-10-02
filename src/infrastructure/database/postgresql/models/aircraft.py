@@ -23,10 +23,12 @@ class Aircraft(Base):
     business_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     airline_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("airline.id"), nullable=False
+        UUID(as_uuid=True), ForeignKey("airline.id", ondelete="CASCADE"), nullable=False
     )
 
-    flights: Mapped[list["Flight"]] = relationship(back_populates="aircraft")
+    flights: Mapped[list["Flight"]] = relationship(
+        back_populates="aircraft", passive_deletes=True
+    )
     airline: Mapped["Airline"] = relationship(back_populates="aircrafts")
 
     @property

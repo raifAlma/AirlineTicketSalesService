@@ -13,9 +13,13 @@ class BookingSeat(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     booking_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("bookings.id", ondelete="CASCADE"),
+        nullable=False,
     )
-    seat_id: Mapped[int] = mapped_column(ForeignKey("seats.id"), nullable=False)
+    seat_id: Mapped[int] = mapped_column(
+        ForeignKey("seats.id", ondelete="CASCADE"), nullable=False
+    )
     price_at_booking: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False)
 
     booking: Mapped["Booking"] = relationship(back_populates="booking_seats")

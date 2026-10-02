@@ -23,11 +23,13 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     full_name: Mapped[str] = mapped_column(String(128), nullable=False)
     phone: Mapped[str] = mapped_column(String(20), nullable=False)
     role: Mapped[str] = mapped_column(
-        String(128), Enum(UserRole), nullable=False, default=UserRole.USER
+        Enum(UserRole), nullable=False, default=UserRole.USER
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
-    bookings: Mapped[List["Booking"]] = relationship(back_populates="user")
+    bookings: Mapped[List["Booking"]] = relationship(
+        back_populates="user", passive_deletes=True
+    )
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):

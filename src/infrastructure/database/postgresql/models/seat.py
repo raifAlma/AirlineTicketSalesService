@@ -19,7 +19,7 @@ class Seat(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     flight_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("flights.id"), nullable=False
+        UUID(as_uuid=True), ForeignKey("flights.id", ondelete="CASCADE"), nullable=False
     )
     seat_number: Mapped[str] = mapped_column(String(10), nullable=False)
     class_type: Mapped[SeatType] = mapped_column(Enum(SeatType), nullable=False)

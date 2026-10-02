@@ -26,10 +26,12 @@ class Booking(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="RESTRICT"), nullable=False
     )
     flight_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("flights.id"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("flights.id", ondelete="RESTRICT"),
+        nullable=False,
     )
     user: Mapped["User"] = relationship(back_populates="bookings")
     flight: Mapped["Flight"] = relationship(back_populates="bookings")
@@ -37,5 +39,9 @@ class Booking(Base):
     status: Mapped[BookingStatusType] = mapped_column(
         Enum(BookingStatusType), default=BookingStatusType.PENDING
     )
-    booking_seats: Mapped[List["BookingSeat"]] = relationship(back_populates="booking")
-    payment: Mapped["Payment"] = relationship(back_populates="booking")
+    booking_seats: Mapped[List["BookingSeat"]] = relationship(
+        back_populates="booking", passive_deletes=True
+    )
+    payment: Mapped["Payment"] = relationship(
+        back_populates="booking", passive_deletes=True
+    )
