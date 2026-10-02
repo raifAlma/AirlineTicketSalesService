@@ -42,11 +42,13 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
 
     async def search(self, query: str) -> List[Airline]:
         pattern = f"%{query}%"
-        smt = select(Airline).where(or_(
-            Airline.iata_code == query.upper(),
-            Airline.name.ilike(pattern),
-            Airline.country.ilike(pattern),
-        ))
+        smt = select(Airline).where(
+            or_(
+                Airline.iata_code == query.upper(),
+                Airline.name.ilike(pattern),
+                Airline.country.ilike(pattern),
+            )
+        )
         result = await self.session.execute(smt)
         airline = result.scalars().all()
         return airline
@@ -59,3 +61,6 @@ class PostgreSQLAirlineRepository(AbstractAirlineRepository):
             raise AirlineNotFound(id=id)
         await self.session.delete(airline)
         await self.session.flush()
+
+
+# todo: какскадное удалени
