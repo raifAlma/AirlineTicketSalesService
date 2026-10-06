@@ -8,6 +8,7 @@ from usecases.airline.create.implementation import PostgreSQLCreateAirlineUseCas
 from usecases.airline.delete.implementation import PostgreSQLDeleteAirlineUseCase
 from usecases.airline.get_by_id.implementation import PostgreSQLGetByIdAirlineUseCase
 from usecases.airline.search.implementation import PostgreSQLSearchAirlineUseCase
+from usecases.airline.update.implementation import PostgreSQLUpdateAirlineUseCase
 
 
 def get_airline_unit_of_work(
@@ -42,3 +43,10 @@ def delete_airline_use_case(
 ):
     uow = get_airline_unit_of_work(session)
     return PostgreSQLDeleteAirlineUseCase(uow=uow)
+
+
+def update_airline_use_case(
+        session: AsyncSession = Depends(get_async_session),
+):
+    uow = get_airline_unit_of_work(session)
+    return PostgreSQLUpdateAirlineUseCase(uow=uow)
