@@ -25,3 +25,12 @@ class CreateAirlineSchema(BaseModel):
 class ResponseCreateAirlineSchema(CreateAirlineSchema):
     id: AirlineIdType
     model_config = ConfigDict(from_attributes=True)
+
+class UpdateAirlineSchema(BaseModel):
+    name: str | None = None
+    iata_code: str | None = None
+    country: str | None = None
+    @field_validator("iata_code")
+    @classmethod
+    def create_validate_iata_code(cls, v):
+        return validate_iata_code(v)
