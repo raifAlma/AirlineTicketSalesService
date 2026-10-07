@@ -75,4 +75,6 @@ async def update_aircraft(
         aircraft = await usecase.execute(id, payload)
     except AircraftNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
+    except InvalidAircraftField as e:
+        raise HTTPException(status_code=422, detail=str(e))
     return aircraft
